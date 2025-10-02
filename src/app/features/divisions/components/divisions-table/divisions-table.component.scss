@@ -1,524 +1,4 @@
-// Divisions Table Component Styles - Based on Figma Design
-
-// --- NAVBAR RESTAURADO ---
-.main-menu {
-  background-color: #2E52F8;
-  background-image: linear-gradient(270deg, rgba(86, 167, 242, 1) 28%, rgba(255, 255, 255, 0) 83%);
-  height: 55px;
-  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.15);
-
-  .menu-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 100%;
-    padding: 0 32px;
-  }
-
-  .menu-left {
-    display: flex;
-    align-items: center;
-    gap: 30px;
-
-    .logo {
-      .logo-img {
-        height: 28px;
-      }
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 20px;
-
-      .nav-link {
-        color: rgba(255, 255, 255, 0.8);
-        font-size: 14px;
-        text-decoration: none;
-        padding: 4px 8px;
-        display: flex;
-        align-items: center;
-        gap: 4px;
-
-        &.active {
-          color: white;
-          font-weight: 600;
-        }
-
-        &:hover {
-          color: white;
-        }
-
-        .nav-dropdown-icon {
-          font-size: 10px;
-          margin-left: 4px;
-        }
-      }
-    }
-  }
-
-  .menu-right {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-
-    .action-icons {
-      display: flex;
-      gap: 8px;
-
-      .icon-button {
-        color: white;
-        background: transparent;
-        border: none;
-        height: 32px;
-        width: 32px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-
-        .header-icon {
-          font-size: 16px;
-        }
-      }
-
-      .notification-button {
-        .notification-badge {
-          position: absolute;
-          top: 2px;
-          right: 2px;
-          background: #FF4D4F;
-          color: white;
-          border-radius: 50%;
-          height: 15px;
-          width: 15px;
-          font-size: 10px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-      }
-    }
-
-    .user-profile {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-
-      .user-info {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-
-        .user-name {
-          color: white;
-          font-size: 14px;
-        }
-
-        .user-dropdown-icon {
-          color: white;
-          font-size: 10px;
-        }
-      }
-
-      .user-avatar {
-        .avatar-img {
-          height: 36px;
-          width: 36px;
-          border-radius: 50%;
-          object-fit: cover;
-        }
-      }
-    }
-
-    .logo-right {
-      margin-left: 10px;
-
-      .logo-img {
-        height: 30px;
-      }
-    }
-  }
-}
-
-.divisions-header {
-  background-color: white;
-  padding: 11px 32px;
-  box-shadow: 1px 0px 4px 0px rgba(0, 0, 0, 0.15);
-
-  .header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 42px;
-  }
-
-  .header-left {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-
-    .breadcrumb {
-      .breadcrumb-item {
-        color: #555155;
-        font-size: 14px;
-        font-weight: 600;
-
-        &.active {
-          color: #555155;
-        }
-      }
-    }
-
-    .page-title {
-      color: #2694FC;
-      font-size: 14px;
-      font-weight: 400;
-      margin: 0;
-    }
-  }
-
-  .header-right {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    height: 34px; /* Altura fija para el contenedor */
-
-.search-input {
-  width: 280px;
-
-  ::ng-deep .ant-input-wrapper {
-    display: flex;
-    align-items: center;
-    height: 32px;
-  }
-
-  ::ng-deep .ant-input-group {
-    display: flex;
-    align-items: center;
-  }
-
-  ::ng-deep .ant-input-affix-wrapper {
-    padding: 0 11px;
-    height: 32px;
-    border: 1px solid #d9d9d9;
-    border-radius: 4px;
-    background-color: white;
-
-    &:hover, &:focus, &-focused {
-      border-color: #2E52F8;
-      box-shadow: 0 0 0 2px rgba(46, 82, 248, 0.2);
-    }
-  }
-
-  ::ng-deep .ant-input {
-    height: 24px;
-    border: none;
-    box-shadow: none;
-    padding: 0;
-
-    &::placeholder {
-      color: #bfbfbf;
-      font-size: 13px;
-    }
-
-    &:hover, &:focus {
-      border-color: #2E52F8;
-    }
-  }
-
-  ::ng-deep .search-icon {
-    color: #8c8c8c;
-    cursor: pointer;
-    transition: color 0.3s;
-    display: flex;
-    align-items: center;
-    font-size: 14px;
-
-    &:hover {
-      color: #2E52F8;
-    }
-  }
-}    .columns-btn {
-      border: 1px solid #EDE9E9;
-      border-radius: 3px;
-      padding: 7px 10px;
-      background: white;
-      color: #A7A3A3;
-      font-size: 13px;
-      min-width: 140px;
-
-      .dropdown-icon {
-        color: #AFA9AF;
-        margin-left: 8px;
-      }
-    }
-
-    .action-btn {
-      width: 28px;
-      height: 28px;
-      border-radius: 1px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.15);
-
-      &.import-btn, &.export-btn {
-        background: white;
-        border: none;
-
-        .btn-icon {
-          color: #1890FF;
-          font-size: 16px;
-        }
-      }
-
-      &.create-btn {
-        background: #1890FF;
-        border: none;
-        box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.15);
-
-        .create-icon {
-          color: white;
-          font-size: 24px;
-          font-weight: 400;
-          line-height: 1;
-        }
-      }
-    }
-  }
-}
-
-.table-controls {
-  padding: 20px 32px 0;
-  background: #F9F9F9;
-
-  .controls-wrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #EDE9E9;
-    padding-bottom: 10px;
-    margin-bottom: 10px;
-  }
-
-  .secondary-tabs {
-    display: flex;
-    gap: 32px;
-
-    .tab-link {
-      color: #979797;
-      font-size: 14px;
-      text-decoration: none;
-      padding: 10px 0;
-      position: relative;
-      transition: color 0.2s ease;
-
-      &.active {
-        color: #1890FF;
-        font-weight: 600;
-
-        &::after {
-          content: '';
-          position: absolute;
-          bottom: -10px;
-          left: 0;
-          width: 100%;
-          height: 2px;
-          background-color: #1890FF;
-        }
-      }
-
-      &:hover:not(.active) {
-        color: #40a9ff;
-      }
-    }
-  }
-
-  .view-toggle {
-    .toggle-container {
-      display: inline-flex;
-      background: white;
-      border: 0.75px solid #C4C4C4;
-      border-radius: 3px;
-      overflow: hidden;
-
-      .toggle-option {
-        padding: 5px 9px;
-        background: white;
-        border: none;
-        color: #A6A6A6;
-        font-size: 13px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-
-        &.active {
-          background: #EEF3FA;
-          color: #2694FC;
-          border-right: 1px solid #378FEE;
-        }
-
-        &:first-child.active {
-          border-right: 1px solid #378FEE;
-        }
-
-        &:hover:not(.active) {
-          background: #f5f5f5;
-        }
-      }
-    }
-  }
-}
-
-.filter-section {
-  margin: 16px 32px 0;
-  background: white;
-  border: 1px solid #EDE9E9;
-  border-radius: 4px;
-  padding: 16px;
-  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.15);
-
-  .filter-content {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .filter-search {
-    .ant-input-group {
-      width: 200px;
-    }
-  }
-
-// Filter styles
-.filter-tags {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin-bottom: 15px;
-  width: 100%;
-
-  .active-filters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-
-    .active-filter-tag {
-      display: flex;
-      align-items: center;
-      padding: 3px 10px;
-      background-color: #f0f8ff;
-      border: 1px solid #c1d8ff;
-      border-radius: 3px;
-
-      .filter-tag-label {
-        color: #1890ff;
-        font-size: 12px;
-        font-weight: 500;
-        margin-right: 4px;
-      }
-
-      .filter-tag-value {
-        color: #333;
-        font-size: 12px;
-      }
-
-      .filter-tag-close {
-        margin-left: 6px;
-        cursor: pointer;
-        font-size: 11px;
-        color: #999;
-
-        &:hover {
-          color: #666;
-        }
-      }
-    }
-  }
-
-  .filter-options {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    background-color: #f9f9f9;
-    border: 1px solid #e8e8e8;
-    border-radius: 4px;
-    padding: 15px;
-    width: 100%;
-    max-width: 400px;
-
-    .filter-option-title {
-      color: #333;
-      font-weight: 600;
-      font-size: 14px;
-      margin-bottom: 8px;
-    }
-
-    .division-parent-options,
-    .level-options {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      max-height: 200px;
-      overflow-y: auto;
-
-      .parent-option,
-      .level-option {
-        padding: 6px 12px;
-        background-color: #fff;
-        border: 1px solid #d9d9d9;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 13px;
-
-        &:hover {
-          border-color: #1890ff;
-          color: #1890ff;
-        }
-
-        &.selected {
-          background-color: #e6f7ff;
-          border-color: #1890ff;
-          color: #1890ff;
-        }
-      }
-    }
-
-    .filter-search-specific {
-      width: 100%;
-
-      .name-search-input {
-        width: 100%;
-      }
-
-      .search-specific-icon {
-        cursor: pointer;
-        color: #1890ff;
-      }
-    }
-  }
-}  .filter-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    border-top: 0.75px solid #E7E7E7;
-    padding-top: 12px;
-    margin-top: 15px;
-
-    button {
-      min-width: 90px;
-
-      &[nzType="primary"] {
-        background-color: #2E52F8;
-      }
-    }
-
-    button {
-      font-size: 13px;
-    }
-  }
-}
-
+// Table Container and Styles
 .table-container {
   background: white;
   margin: 8px 32px 16px;
@@ -575,6 +55,25 @@
         width: 198px;
       }
     }
+
+    .ant-table-tbody > tr {
+      &:hover {
+        background-color: #fafafa;
+      }
+
+      > td {
+        padding: 12px 16px;
+        border-bottom: 1px solid #f0f0f0;
+        font-size: 13px;
+        color: #555155;
+
+        &.checkbox-cell {
+          text-align: center;
+        }
+      }
+    }
+  }
+}
 
 .header-cell {
   display: flex;
@@ -635,7 +134,7 @@
   }
 }
 
-// Estilos para los dropdowns de filtro
+// Filter dropdown panel styles
 .filter-dropdown-panel {
   background-color: white;
   border-radius: 4px;
@@ -704,434 +203,69 @@
     display: flex;
     justify-content: flex-end;
     gap: 8px;
-    margin-top: 12px;
     padding-top: 12px;
     border-top: 1px solid #f0f0f0;
 
     button {
       font-size: 13px;
-      height: 28px;
-      padding: 0 10px;
-
-      &[nzType="primary"] {
-        background-color: #1890ff;
-      }
-    }
-  }
-}    .ant-table-tbody > tr {
-      &:hover > td {
-        background-color: #f5f8ff;
-      }
-
-      &.ant-table-row-selected > td {
-        background-color: #e6f7ff;
-      }
-    }
-
-    .ant-table-tbody > tr > td {
-      padding: 12px 16px;
-      border-bottom: 1px solid #EDE9E9;
-      height: 48px;
-      font-size: 13px;
-
-      &.checkbox-cell {
-        text-align: center;
-      }
-
-      &.division-cell {
-        background: rgba(255, 255, 255, 0);
-
-        .division-content {
-          display: flex;
-          align-items: center;
-
-          .division-name {
-            color: #555155;
-            font-size: 14px;
-            font-weight: 400;
-          }
-        }
-      }
-
-      &.parent-cell {
-        color: #555155;
-        font-size: 14px;
-      }
-
-      &.collaborators-cell {
-        color: #555155;
-        font-size: 14px;
-        text-align: left;
-      }
-
-      &.level-cell {
-        color: #555155;
-        font-size: 14px;
-        text-align: left;
-      }
-
-      &.subdivisions-cell {
-        .subdivisions-content {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-
-          .subdivisions-count {
-            color: #555155;
-            font-size: 14px;
-          }
-
-          .add-subdivision-btn {
-            width: 16px;
-            height: 16px;
-            min-width: 16px;
-            padding: 0;
-            border-radius: 50%;
-            background: rgba(73, 197, 169, 0.9);
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            .anticon {
-              color: white;
-              font-size: 10px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-            }
-          }
-        }
-      }
-
-      &.ambassadors-cell {
-        color: #555155;
-        font-size: 14px;
-
-        .ambassador-name {
-          font-weight: 400;
-        }
-      }
-    }
-
-    // Striped rows effect from Figma
-    .ant-table-tbody > tr:nth-child(odd) > td {
-      background: #F9F9F9;
-    }
-
-    .ant-table-tbody > tr:nth-child(even) > td {
-      background: white;
-    }
-
-    // Hover effects
-    .ant-table-tbody > tr:hover > td {
-      background-color: rgba(24, 144, 255, 0.04) !important;
     }
   }
 }
 
-.table-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 32px;
-  background: #F9F9F9;
-  border-top: 1px solid #EDE9E9;
-
-  .footer-left {
-    .total-count {
-      color: #979797;
-      font-size: 13px;
-    }
-  }
-
-  .footer-right {
+// Table cell styles
+.division-cell {
+  .division-content {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 8px;
 
-    .page-size-selector {
+    .division-name {
+      font-weight: 500;
+      color: #262626;
+    }
+  }
+}
+
+.parent-cell {
+  color: #595959;
+}
+
+.collaborators-cell,
+.level-cell {
+  color: #595959;
+  text-align: center;
+}
+
+.subdivisions-cell {
+  .subdivisions-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .subdivisions-count {
+      color: #595959;
+    }
+
+    .add-subdivision-btn {
+      width: 24px;
+      height: 24px;
+      padding: 0;
       display: flex;
       align-items: center;
-      gap: 8px;
-
-      .page-size-text {
-        color: #555155;
-        font-size: 14px;
-      }
-
-      .page-size-select {
-        width: 60px;
-
-        ::ng-deep .ant-select-selector {
-          border: none;
-          padding: 0;
-          box-shadow: none;
-
-          .ant-select-selection-item {
-            color: #1890FF;
-            font-weight: 500;
-            font-size: 14px;
-          }
-        }
-
-        ::ng-deep .ant-select-arrow {
-          color: #1890FF;
-          right: -2px;
-        }
-      }
-    }
-
-    .pagination {
-      .ant-pagination-item {
-        border: 1px solid #D9D9D9;
-        border-radius: 4px;
-        width: 32px;
-        height: 32px;
-        line-height: 30px;
-        margin-right: 8px;
-
-        a {
-          color: #555155;
-          font-size: 14px;
-        }
-
-        &.ant-pagination-item-active {
-          border-color: #2E52F8;
-          background: #2E52F8;
-
-          a {
-            color: white;
-          }
-
-          a {
-            color: #1890FF;
-            font-weight: 500;
-          }
-        }
-      }
-
-      .ant-pagination-prev,
-      .ant-pagination-next {
-        width: 32px;
-        height: 32px;
-        line-height: 30px;
-        border: 1px solid #D9D9D9;
-        border-radius: 4px;
-        margin-right: 8px;
-
-        .anticon {
-          color: #666666;
-        }
-
-        &:hover {
-          .anticon {
-            color: #1890FF;
-          }
-        }
-      }
-
-      .ant-pagination-jump-prev,
-      .ant-pagination-jump-next {
-        margin-right: 8px;
-
-        .ant-pagination-item-container {
-          .ant-pagination-item-ellipsis {
-            color: #D9D9D9;
-
-            .anticon {
-              color: #D9D9D9;
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
-// Responsive Design
-@media (max-width: 1200px) {
-  .main-menu {
-    padding: 0 16px;
-
-    .menu-container {
-      padding: 0;
-    }
-
-    .menu-left {
-      gap: 16px;
-    }
-
-    .nav-links {
-      gap: 10px;
-    }
-  }
-
-  .divisions-header {
-    padding: 11px 16px;
-
-    .header-content {
-      flex-direction: column;
-      gap: 8px;
-      height: auto;
-
-      .header-right {
-        width: 100%;
-        justify-content: flex-end;
-      }
-    }
-  }
-
-  .table-controls,
-  .table-footer {
-    padding: 16px;
-  }
-
-  .table-container {
-    margin: 16px;
-  }
-
-  .filter-button-container,
-  .filter-section {
-    margin-left: 16px;
-    margin-right: 16px;
-  }
-}
-
-// Grupo de botones columnas y búsqueda
-.columns-search-group {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-// Columns dropdown menu
-.columns-menu {
-  padding: 8px;
-  max-height: 300px;
-  overflow-y: auto;
-}
-
-@media (max-width: 992px) {
-  .main-menu {
-    .menu-right {
-      .action-icons,
-      .user-profile {
-        margin-right: 8px;
-      }
-    }
-  }
-
-  .header-right {
-    flex-wrap: wrap;
-    gap: 4px !important;
-
-    .search-input {
-      width: 180px !important;
-      height: 32px !important; /* Mantener consistente en modo responsive */
-    }
-
-    .columns-btn {
-      min-width: 120px !important;
-    }
-  }
-
-  .columns-search-group {
-    flex-wrap: wrap;
-    margin-bottom: 8px;
-  }
-
-  .filter-dropdown-panel {
-    min-width: 200px;
-  }
-
-  .table-footer {
-    flex-direction: column;
-    gap: 12px;
-    align-items: flex-start;
-
-    .footer-right {
-      width: 100%;
-      justify-content: space-between;
-    }
-  }
-}
-
-@media (max-width: 768px) {
-  .main-menu {
-    height: auto;
-    padding: 8px 16px;
-
-    .menu-container {
-      flex-direction: column;
-      gap: 8px;
-      align-items: flex-start;
-    }
-
-    .menu-right {
-      width: 100%;
-      justify-content: space-between;
-    }
-
-    .nav-links {
-      display: none;
-    }
-  }
-
-  .header-right {
-    .search-input {
-      width: 150px !important;
-    }
-
-    .columns-btn {
-      min-width: 100px !important;
-    }
-  }
-
-  .filter-section {
-    .filter-content {
-      flex-wrap: wrap;
-    }
-  }
-
-  .filter-tags {
-    flex-wrap: wrap;
-
-    .filter-options {
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-  }
-}
-
-@media (max-width: 576px) {
-  .divisions-header {
-    .header-content {
-      .header-right {
-        flex-wrap: wrap;
-        gap: 8px !important;
-      }
-    }
-  }
-
-  .table-container {
-    margin: 8px;
-    overflow-x: auto;
-
-    .ant-table {
-      white-space: nowrap;
-    }
-  }
-
-  .footer-right {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-
-    .pagination {
-      width: 100%;
-      display: flex;
       justify-content: center;
+      border-radius: 2px;
+      border-color: #d9d9d9;
+
+      &:hover {
+        border-color: #1890ff;
+        color: #1890ff;
+      }
     }
+  }
+}
+
+.ambassadors-cell {
+  .ambassador-name {
+    color: #595959;
   }
 }

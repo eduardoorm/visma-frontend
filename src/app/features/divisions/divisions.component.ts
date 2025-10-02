@@ -16,6 +16,7 @@ import {
   DivisionTableColumn
 } from './models/division.interface';
 import { NavLink, UserInfo, ActionIcon, TabConfig } from '../../shared/models/component-config.interface';
+import { FilterLabels, LevelOption } from './models/table-config.interface';
 
 @Component({
   selector: 'app-divisions',
@@ -68,6 +69,11 @@ import { NavLink, UserInfo, ActionIcon, TabConfig } from '../../shared/models/co
         [sorting]="sorting"
         [allChecked]="allChecked"
         [checkedMap]="checkedMap"
+        [columnLabels]="tableColumns"
+        [filterLabels]="filterLabels"
+        [levelOptions]="levelOptions"
+        [defaultParentName]="'Dirección general'"
+        [emptyValuePlaceholder]="'-'"
         (sortChange)="onSortChange($event)"
         (filterChange)="onFilterChange($event)"
         (allCheckedChange)="onAllChecked($event)"
@@ -157,6 +163,27 @@ export class DivisionsComponent implements OnInit, OnDestroy {
     list: 'Listado',
     tree: 'Árbol'
   };
+
+  // Filter labels configuration
+  filterLabels: FilterLabels = {
+    division: 'División:',
+    divisionSuperior: 'Divisiones superiores:',
+    nivel: 'Niveles:',
+    searchPlaceholder: 'Buscar división por nombre',
+    noDivisionSuperior: 'Sin división superior',
+    resetButton: 'Reiniciar',
+    applyButton: 'Aplicar'
+  };
+
+  // Level options configuration
+  levelOptions: LevelOption[] = [
+    { label: 'Todos los niveles', value: null },
+    { label: 'Nivel 1', value: 1 },
+    { label: 'Nivel 2', value: 2 },
+    { label: 'Nivel 3', value: 3 },
+    { label: 'Nivel 4', value: 4 },
+    { label: 'Nivel 5', value: 5 }
+  ];
 
   constructor(private divisionService: DivisionService) {}
 

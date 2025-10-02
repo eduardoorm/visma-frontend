@@ -7,6 +7,14 @@
   overflow: hidden;
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.05);
 
+  .checkbox-col {
+  width: 50px;
+  min-width: 50px;
+  max-width: 50px;
+  padding: 0;
+  text-align: center;
+  }
+
   .divisions-table {
     border: 1px solid #e8e8e8;
     border-radius: 6px;

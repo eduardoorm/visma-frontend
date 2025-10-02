@@ -29,6 +29,12 @@ export class DivisionsHeaderComponent {
   @Input() searchValue = '';
   @Input() tableColumns: DivisionTableColumn[] = [];
   @Input() selectedColumns: string[] = [];
+  @Input() breadcrumbText = 'Organización';
+  @Input() searchPlaceholder = 'Buscar divisiones por nombre...';
+  @Input() columnDropdownLabel = 'Columnas';
+  @Input() importButtonAriaLabel = 'Importar divisiones';
+  @Input() exportButtonAriaLabel = 'Exportar divisiones';
+  @Input() createButtonAriaLabel = 'Crear nueva división';
 
   @Output() searchChange = new EventEmitter<string>();
   @Output() columnToggle = new EventEmitter<string>();

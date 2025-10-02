@@ -15,6 +15,7 @@ import {
   DivisionSorting,
   DivisionTableColumn
 } from './models/division.interface';
+import { NavLink, UserInfo, ActionIcon, TabConfig } from '../../shared/models/component-config.interface';
 
 @Component({
   selector: 'app-divisions',
@@ -29,12 +30,22 @@ import {
   ],
   template: `
     <div class="divisions-page">
-      <app-navbar></app-navbar>
+      <app-navbar
+        [navLinks]="navLinks"
+        [actionIcons]="actionIcons"
+        [userInfo]="userInfo">
+      </app-navbar>
       
       <app-divisions-header
         [searchValue]="searchValue"
         [tableColumns]="tableColumns"
         [selectedColumns]="selectedColumns"
+        [breadcrumbText]="'Organización'"
+        [searchPlaceholder]="'Buscar divisiones por nombre...'"
+        [columnDropdownLabel]="'Columnas'"
+        [importButtonAriaLabel]="'Importar divisiones'"
+        [exportButtonAriaLabel]="'Exportar divisiones'"
+        [createButtonAriaLabel]="'Crear nueva división'"
         (searchChange)="onSearch($event)"
         (columnToggle)="toggleColumn($event)"
         (importClick)="importDivisions()"
@@ -44,6 +55,8 @@ import {
 
       <app-table-controls
         [viewMode]="viewMode"
+        [tabs]="tabs"
+        [viewModeLabels]="viewModeLabels"
         (viewModeChange)="onViewModeChange($event)">
       </app-table-controls>
 
@@ -65,6 +78,9 @@ import {
         [total]="total"
         [pageSize]="pageSize"
         [pageIndex]="pageIndex"
+        [totalLabel]="'Total colaboradores:'"
+        [pageSizeLabel]="'/ página'"
+        [pageSizeOptions]="[10, 20, 50, 100]"
         (pageSizeChange)="onPageSizeChange($event)"
         (pageIndexChange)="onPageChange($event)">
       </app-table-footer>
@@ -110,6 +126,37 @@ export class DivisionsComponent implements OnInit, OnDestroy {
     { key: 'subdivisiones', title: 'Subdivisiones', sortable: true, filterable: false, width: '150px' },
     { key: 'embajadores', title: 'Embajadores', sortable: false, filterable: false, width: '200px' }
   ];
+
+  // Navbar configuration
+  navLinks: NavLink[] = [
+    { label: 'Dashboard', href: '#', active: false, ariaLabel: 'Ir al Dashboard' },
+    { label: 'Organización', href: '#', active: true, ariaLabel: 'Ir a Organización' },
+    { label: 'Modelos', href: '#', hasDropdown: true, ariaLabel: 'Ver Modelos' },
+    { label: 'Seguimiento', href: '#', hasDropdown: true, ariaLabel: 'Ver Seguimiento' }
+  ];
+
+  actionIcons: ActionIcon[] = [
+    { icon: 'mail', ariaLabel: 'Mensajes' },
+    { icon: 'question-circle', ariaLabel: 'Ayuda' },
+    { icon: 'bell', ariaLabel: 'Notificaciones', badge: 1 }
+  ];
+
+  userInfo: UserInfo = {
+    name: 'Administrador',
+    avatarUrl: 'assets/images/profile-image.png',
+    ariaLabel: 'Perfil de usuario'
+  };
+
+  // Table controls configuration
+  tabs: TabConfig[] = [
+    { label: 'Divisiones', value: '#', active: true, ariaLabel: 'Ver divisiones' },
+    { label: 'Colaboradores', value: '#', active: false, ariaLabel: 'Ver colaboradores' }
+  ];
+
+  viewModeLabels = {
+    list: 'Listado',
+    tree: 'Árbol'
+  };
 
   constructor(private divisionService: DivisionService) {}
 

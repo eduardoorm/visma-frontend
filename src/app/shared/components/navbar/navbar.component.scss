@@ -1,0 +1,139 @@
+.main-menu {
+  background-color: #2E52F8;
+  background-image: linear-gradient(270deg, rgba(86, 167, 242, 1) 28%, rgba(255, 255, 255, 0) 83%);
+  height: 55px;
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.15);
+
+  .menu-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    padding: 0 32px;
+  }
+
+  .menu-left {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+
+    .logo {
+      .logo-img {
+        height: 28px;
+      }
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+
+      .nav-link {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 14px;
+        text-decoration: none;
+        padding: 4px 8px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+
+        &.active {
+          color: white;
+          font-weight: 600;
+        }
+
+        &:hover {
+          color: white;
+        }
+
+        .nav-dropdown-icon {
+          font-size: 10px;
+          margin-left: 4px;
+        }
+      }
+    }
+  }
+
+  .menu-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    .action-icons {
+      display: flex;
+      gap: 8px;
+
+      .icon-button {
+        color: white;
+        background: transparent;
+        border: none;
+        height: 32px;
+        width: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+
+        .header-icon {
+          font-size: 16px;
+        }
+      }
+
+      .notification-button {
+        .notification-badge {
+          position: absolute;
+          top: 2px;
+          right: 2px;
+          background: #FF4D4F;
+          color: white;
+          border-radius: 50%;
+          height: 15px;
+          width: 15px;
+          font-size: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+
+        .user-name {
+          color: white;
+          font-size: 14px;
+        }
+
+        .user-dropdown-icon {
+          color: white;
+          font-size: 10px;
+        }
+      }
+
+      .user-avatar {
+        .avatar-img {
+          height: 36px;
+          width: 36px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+      }
+    }
+
+    .logo-right {
+      margin-left: 10px;
+
+      .logo-img {
+        height: 30px;
+      }
+    }
+  }
+}

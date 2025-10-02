@@ -1,17 +1,73 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Subject, takeUntil } from 'rxjs';
+
+import { NavbarComponent } from '../../shared/components/navbar/navbar.component';
+import { DivisionsHeaderComponent } from '../../shared/components/divisions-header/divisions-header.component';
+import { TableControlsComponent } from '../../shared/components/table-controls/table-controls.component';
 import { DivisionsTableComponent } from './components/divisions-table/divisions-table.component';
+import { TableFooterComponent } from '../../shared/components/table-footer/table-footer.component';
+
+import { DivisionService } from './services/division.service';
+import {
+  DivisionResponseDto,
+  DivisionFilters,
+  DivisionSorting,
+  DivisionTableColumn
+} from './models/division.interface';
 
 @Component({
   selector: 'app-divisions',
   standalone: true,
   imports: [
     CommonModule,
-    DivisionsTableComponent
+    NavbarComponent,
+    DivisionsHeaderComponent,
+    TableControlsComponent,
+    DivisionsTableComponent,
+    TableFooterComponent
   ],
   template: `
     <div class="divisions-page">
-      <app-divisions-table></app-divisions-table>
+      <app-navbar></app-navbar>
+      
+      <app-divisions-header
+        [searchValue]="searchValue"
+        [tableColumns]="tableColumns"
+        [selectedColumns]="selectedColumns"
+        (searchChange)="onSearch($event)"
+        (columnToggle)="toggleColumn($event)"
+        (importClick)="importDivisions()"
+        (exportClick)="exportDivisions()"
+        (createClick)="createDivision()">
+      </app-divisions-header>
+
+      <app-table-controls
+        [viewMode]="viewMode"
+        (viewModeChange)="onViewModeChange($event)">
+      </app-table-controls>
+
+      <app-divisions-table
+        [divisions]="divisions"
+        [loading]="loading"
+        [selectedColumns]="selectedColumns"
+        [filters]="filters"
+        [sorting]="sorting"
+        [allChecked]="allChecked"
+        [checkedMap]="checkedMap"
+        (sortChange)="onSortChange($event)"
+        (filterChange)="onFilterChange($event)"
+        (allCheckedChange)="onAllChecked($event)"
+        (itemCheckedChange)="onItemChecked($event)">
+      </app-divisions-table>
+
+      <app-table-footer
+        [total]="total"
+        [pageSize]="pageSize"
+        [pageIndex]="pageIndex"
+        (pageSizeChange)="onPageSizeChange($event)"
+        (pageIndexChange)="onPageChange($event)">
+      </app-table-footer>
     </div>
   `,
   styles: [`
@@ -21,4 +77,215 @@ import { DivisionsTableComponent } from './components/divisions-table/divisions-
     }
   `]
 })
-export class DivisionsComponent {}
+export class DivisionsComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
+
+  // Data properties
+  divisions: DivisionResponseDto[] = [];
+  loading = false;
+  total = 0;
+  pageSize = 10;
+  pageIndex = 1;
+
+  // Search and filter properties
+  searchValue = '';
+  filters: DivisionFilters = {};
+  sorting: DivisionSorting = { field: 'name', direction: 'asc' };
+
+  // Table configuration
+  viewMode: 'list' | 'tree' = 'list';
+  selectedColumns: string[] = ['division', 'divisionSuperior', 'colaboradores', 'nivel', 'subdivisiones', 'embajadores'];
+
+  // Selection properties
+  allChecked = false;
+  indeterminate = false;
+  checkedMap: { [key: number]: boolean } = {};
+
+  // Table columns configuration
+  tableColumns: DivisionTableColumn[] = [
+    { key: 'division', title: 'División', sortable: true, filterable: true, width: '250px' },
+    { key: 'divisionSuperior', title: 'División superior', sortable: true, filterable: true, width: '200px' },
+    { key: 'colaboradores', title: 'Colaboradores', sortable: true, filterable: false, width: '150px' },
+    { key: 'nivel', title: 'Nivel', sortable: true, filterable: true, width: '100px' },
+    { key: 'subdivisiones', title: 'Subdivisiones', sortable: true, filterable: false, width: '150px' },
+    { key: 'embajadores', title: 'Embajadores', sortable: false, filterable: false, width: '200px' }
+  ];
+
+  constructor(private divisionService: DivisionService) {}
+
+  ngOnInit(): void {
+    this.loadDivisions();
+    this.initCheckedMap();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  /**
+   * Initialize the checked map
+   */
+  initCheckedMap(): void {
+    this.checkedMap = {};
+    this.allChecked = false;
+    this.indeterminate = false;
+  }
+
+  /**
+   * Load divisions with filters and pagination
+   */
+  loadDivisions(): void {
+    this.loading = true;
+    this.initCheckedMap();
+
+    this.divisionService.getAllDivisions(
+      this.pageIndex,
+      this.pageSize,
+      this.filters,
+      this.sorting
+    ).pipe(
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: (response) => {
+        this.divisions = response.data;
+        this.total = response.meta.total;
+        this.loading = false;
+        this.refreshCheckedStatus();
+      },
+      error: (error) => {
+        console.error('Error loading divisions:', error);
+        this.loading = false;
+      }
+    });
+  }
+
+  /**
+   * Handle search
+   */
+  onSearch(value: string): void {
+    this.searchValue = value;
+    this.filters.search = value || undefined;
+    this.pageIndex = 1;
+    this.loadDivisions();
+  }
+
+  /**
+   * Handle sort change
+   */
+  onSortChange(event: { column: string, direction: 'asc' | 'desc' }): void {
+    this.sorting = { field: event.column as any, direction: event.direction };
+    this.loadDivisions();
+  }
+
+  /**
+   * Handle filter change
+   */
+  onFilterChange(filters: DivisionFilters): void {
+    this.filters = filters;
+    this.pageIndex = 1;
+    this.loadDivisions();
+  }
+
+  /**
+   * Handle page change
+   */
+  onPageChange(page: number): void {
+    this.pageIndex = page;
+    this.loadDivisions();
+  }
+
+  /**
+   * Handle page size change
+   */
+  onPageSizeChange(size: number): void {
+    this.pageSize = size;
+    this.pageIndex = 1;
+    this.loadDivisions();
+  }
+
+  /**
+   * Handle view mode change
+   */
+  onViewModeChange(mode: 'list' | 'tree'): void {
+    this.viewMode = mode;
+    this.loadDivisions();
+  }
+
+  /**
+   * Toggle column visibility
+   */
+  toggleColumn(columnKey: string): void {
+    const index = this.selectedColumns.indexOf(columnKey);
+    if (index > -1) {
+      this.selectedColumns.splice(index, 1);
+    } else {
+      this.selectedColumns.push(columnKey);
+    }
+  }
+
+  /**
+   * Handle select all
+   */
+  onAllChecked(checked: boolean): void {
+    this.divisions.forEach(division => {
+      this.checkedMap[division.id] = checked;
+    });
+    this.refreshCheckedStatus();
+  }
+
+  /**
+   * Handle individual item check
+   */
+  onItemChecked(event: { id: number, checked: boolean }): void {
+    this.checkedMap[event.id] = event.checked;
+    this.refreshCheckedStatus();
+  }
+
+  /**
+   * Refresh checked status
+   */
+  refreshCheckedStatus(): void {
+    const divisions = this.divisions;
+    const checkedCount = divisions.filter(d => this.checkedMap[d.id]).length;
+    this.allChecked = divisions.length > 0 && checkedCount === divisions.length;
+    this.indeterminate = checkedCount > 0 && checkedCount < divisions.length;
+  }
+
+  /**
+   * Create new division
+   */
+  createDivision(): void {
+    // TODO: Open modal to create division
+    console.log('Create division');
+  }
+
+  /**
+   * Export divisions
+   */
+  exportDivisions(): void {
+    this.divisionService.exportDivisions('csv')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (blob) => {
+          const url = window.URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = 'divisiones.csv';
+          link.click();
+          window.URL.revokeObjectURL(url);
+        },
+        error: (error) => {
+          console.error('Error exporting divisions:', error);
+        }
+      });
+  }
+
+  /**
+   * Import divisions
+   */
+  importDivisions(): void {
+    // TODO: Open modal to import file
+    console.log('Import divisions');
+  }
+}

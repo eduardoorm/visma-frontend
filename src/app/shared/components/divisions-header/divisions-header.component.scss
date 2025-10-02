@@ -1,0 +1,159 @@
+.divisions-header {
+  background-color: white;
+  padding: 11px 32px;
+  box-shadow: 1px 0px 4px 0px rgba(0, 0, 0, 0.15);
+
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 42px;
+  }
+
+  .header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    .breadcrumb {
+      .breadcrumb-item {
+        color: #555155;
+        font-size: 14px;
+        font-weight: 600;
+
+        &.active {
+          color: #555155;
+        }
+      }
+    }
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 34px;
+
+    .columns-search-group {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .columns-btn {
+      border: 1px solid #EDE9E9;
+      border-radius: 3px;
+      padding: 7px 10px;
+      background: white;
+      color: #A7A3A3;
+      font-size: 13px;
+      min-width: 140px;
+
+      .dropdown-icon {
+        color: #AFA9AF;
+        margin-left: 8px;
+      }
+    }
+
+    .search-input {
+      width: 280px;
+
+      ::ng-deep .ant-input-wrapper {
+        display: flex;
+        align-items: center;
+        height: 32px;
+      }
+
+      ::ng-deep .ant-input-group {
+        display: flex;
+        align-items: center;
+      }
+
+      ::ng-deep .ant-input-affix-wrapper {
+        padding: 0 11px;
+        height: 32px;
+        border: 1px solid #d9d9d9;
+        border-radius: 4px;
+        background-color: white;
+
+        &:hover, &:focus, &-focused {
+          border-color: #2E52F8;
+          box-shadow: 0 0 0 2px rgba(46, 82, 248, 0.2);
+        }
+      }
+
+      ::ng-deep .ant-input {
+        height: 24px;
+        border: none;
+        box-shadow: none;
+        padding: 0;
+
+        &::placeholder {
+          color: #bfbfbf;
+          font-size: 13px;
+        }
+
+        &:hover, &:focus {
+          border-color: #2E52F8;
+        }
+      }
+
+      ::ng-deep .search-icon {
+        color: #8c8c8c;
+        cursor: pointer;
+        transition: color 0.3s;
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+
+        &:hover {
+          color: #2E52F8;
+        }
+      }
+    }
+
+    .action-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.15);
+
+      &.import-btn, &.export-btn {
+        background: white;
+        border: none;
+
+        .btn-icon {
+          color: #1890FF;
+          font-size: 16px;
+        }
+      }
+
+      &.create-btn {
+        background: #1890FF;
+        border: none;
+        box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.15);
+
+        .create-icon {
+          color: white;
+          font-size: 24px;
+          font-weight: 400;
+          line-height: 1;
+        }
+      }
+    }
+  }
+}
+
+::ng-deep .columns-menu {
+  .ant-dropdown-menu-item {
+    padding: 8px 12px;
+
+    label {
+      margin: 0;
+      cursor: pointer;
+    }
+  }
+}

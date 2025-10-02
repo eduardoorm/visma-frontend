@@ -1,0 +1,28 @@
+<!-- View Toggle -->
+<div class="table-controls">
+  <div class="controls-wrapper">
+    <!-- Pestañas de navegación secundaria -->
+    <div class="secondary-tabs">
+      <a href="#" class="tab-link active">Divisiones</a>
+      <a href="#" class="tab-link">Colaboradores</a>
+    </div>
+
+    <!-- Toggle entre vista lista y árbol -->
+    <div class="view-toggle">
+      <div class="toggle-container">
+        <button
+          class="toggle-option"
+          [class.active]="viewMode === 'list'"
+          (click)="setViewMode('list')">
+          Listado
+        </button>
+        <button
+          class="toggle-option"
+          [class.active]="viewMode === 'tree'"
+          (click)="setViewMode('tree')">
+          Árbol
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

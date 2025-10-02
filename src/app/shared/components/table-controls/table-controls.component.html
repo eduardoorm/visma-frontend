@@ -3,8 +3,15 @@
   <div class="controls-wrapper">
     <!-- Pestañas de navegación secundaria -->
     <div class="secondary-tabs">
-      <a href="#" class="tab-link active">Divisiones</a>
-      <a href="#" class="tab-link">Colaboradores</a>
+      <a 
+        *ngFor="let tab of tabs" 
+        [href]="tab.value" 
+        class="tab-link"
+        [class.active]="tab.active"
+        [attr.aria-label]="tab.ariaLabel || tab.label"
+        (click)="onTabClick(tab)">
+        {{ tab.label }}
+      </a>
     </div>
 
     <!-- Toggle entre vista lista y árbol -->
@@ -13,14 +20,16 @@
         <button
           class="toggle-option"
           [class.active]="viewMode === 'list'"
+          [attr.aria-label]="viewModeLabels.list"
           (click)="setViewMode('list')">
-          Listado
+          {{ viewModeLabels.list }}
         </button>
         <button
           class="toggle-option"
           [class.active]="viewMode === 'tree'"
+          [attr.aria-label]="viewModeLabels.tree"
           (click)="setViewMode('tree')">
-          Árbol
+          {{ viewModeLabels.tree }}
         </button>
       </div>
     </div>

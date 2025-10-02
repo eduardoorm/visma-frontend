@@ -16,8 +16,10 @@ import { DivisionService } from '../../services/division.service';
 import {
   DivisionResponseDto,
   DivisionFilters,
-  DivisionSorting
+  DivisionSorting,
+  DivisionTableColumn
 } from '../../models/division.interface';
+import { FilterLabels, LevelOption } from '../../models/table-config.interface';
 
 @Component({
   selector: 'app-divisions-table',
@@ -46,6 +48,26 @@ export class DivisionsTableComponent implements OnInit, OnDestroy {
   @Input() sorting: DivisionSorting = { field: 'name', direction: 'asc' };
   @Input() allChecked = false;
   @Input() checkedMap: { [key: number]: boolean } = {};
+  @Input() columnLabels: DivisionTableColumn[] = [];
+  @Input() filterLabels: FilterLabels = {
+    division: 'División:',
+    divisionSuperior: 'Divisiones superiores:',
+    nivel: 'Niveles:',
+    searchPlaceholder: 'Buscar división por nombre',
+    noDivisionSuperior: 'Sin división superior',
+    resetButton: 'Reiniciar',
+    applyButton: 'Aplicar'
+  };
+  @Input() levelOptions: LevelOption[] = [
+    { label: 'Todos los niveles', value: null },
+    { label: 'Nivel 1', value: 1 },
+    { label: 'Nivel 2', value: 2 },
+    { label: 'Nivel 3', value: 3 },
+    { label: 'Nivel 4', value: 4 },
+    { label: 'Nivel 5', value: 5 }
+  ];
+  @Input() defaultParentName = 'Dirección general';
+  @Input() emptyValuePlaceholder = '-';
 
   @Output() sortChange = new EventEmitter<{ column: string, direction: 'asc' | 'desc' }>();
   @Output() filterChange = new EventEmitter<DivisionFilters>();
@@ -55,16 +77,6 @@ export class DivisionsTableComponent implements OnInit, OnDestroy {
   // Filter properties
   nameSearchValue = '';
   activeFilterColumn: string | null = null;
-
-  // Filter options
-  levelOptions = [
-    { label: 'Todos los niveles', value: null },
-    { label: 'Nivel 1', value: 1 },
-    { label: 'Nivel 2', value: 2 },
-    { label: 'Nivel 3', value: 3 },
-    { label: 'Nivel 4', value: 4 },
-    { label: 'Nivel 5', value: 5 }
-  ];
 
   parentDivisions: DivisionResponseDto[] = [];
 
@@ -166,10 +178,10 @@ export class DivisionsTableComponent implements OnInit, OnDestroy {
    * Obtiene el nombre de la división padre
    */
   getParentDivisionName(parentId: number | undefined): string {
-    if (!parentId) return '-';
+    if (!parentId) return this.emptyValuePlaceholder;
     const parent = this.divisions.find(d => d.id === parentId) ||
                    this.parentDivisions.find(d => d.id === parentId);
-    return parent?.name || 'Dirección general';
+    return parent?.name || this.defaultParentName;
   }
 
   /**
@@ -180,6 +192,14 @@ export class DivisionsTableComponent implements OnInit, OnDestroy {
       return division.subdivisions.length;
     }
     return this.divisions.filter(d => d.parentId === division.id).length;
+  }
+
+  /**
+   * Obtiene el label de una columna por su key
+   */
+  getColumnLabel(columnKey: string): string {
+    const column = this.columnLabels.find(c => c.key === columnKey);
+    return column?.title || columnKey;
   }
 
   /**

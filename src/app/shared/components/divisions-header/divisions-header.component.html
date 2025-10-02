@@ -3,7 +3,7 @@
   <div class="header-content">
     <div class="header-left">
       <div class="breadcrumb">
-        <span class="breadcrumb-item active">Organización</span>
+        <span class="breadcrumb-item active">{{ breadcrumbText }}</span>
       </div>
     </div>
 
@@ -11,8 +11,14 @@
 
       <!-- Columns Dropdown -->
       <div class="columns-search-group">
-        <button nz-button nzType="default" class="columns-btn" nz-dropdown [nzDropdownMenu]="columnsMenu">
-          <span>Columnas</span>
+        <button 
+          nz-button 
+          nzType="default" 
+          class="columns-btn" 
+          nz-dropdown 
+          [nzDropdownMenu]="columnsMenu"
+          [attr.aria-label]="columnDropdownLabel">
+          <span>{{ columnDropdownLabel }}</span>
           <span nz-icon nzType="down" class="dropdown-icon"></span>
         </button>
         <nz-dropdown-menu #columnsMenu="nzDropdownMenu">
@@ -32,27 +38,48 @@
           <input
             type="text"
             nz-input
-            placeholder="Buscar divisiones por nombre..."
+            [placeholder]="searchPlaceholder"
             [(ngModel)]="searchValue"
             (ngModelChange)="onSearch($event)"
             (keyup.enter)="onSearch(searchValue)"
+            [attr.aria-label]="searchPlaceholder"
           />
         </nz-input-group>
         <ng-template #searchSuffix>
-          <span nz-icon nzType="search" class="search-icon" (click)="onSearch(searchValue)"></span>
+          <span 
+            nz-icon 
+            nzType="search" 
+            class="search-icon" 
+            (click)="onSearch(searchValue)"
+            aria-label="Buscar"></span>
         </ng-template>
       </div>
 
       <!-- Action Buttons -->
-      <button nz-button nzType="default" class="action-btn import-btn" (click)="onImport()">
+      <button 
+        nz-button 
+        nzType="default" 
+        class="action-btn import-btn" 
+        (click)="onImport()"
+        [attr.aria-label]="importButtonAriaLabel">
         <span nz-icon nzType="upload" class="btn-icon"></span>
       </button>
 
-      <button nz-button nzType="default" class="action-btn export-btn" (click)="onExport()">
+      <button 
+        nz-button 
+        nzType="default" 
+        class="action-btn export-btn" 
+        (click)="onExport()"
+        [attr.aria-label]="exportButtonAriaLabel">
         <span nz-icon nzType="download" class="btn-icon"></span>
       </button>
 
-      <button nz-button nzType="primary" class="action-btn create-btn" (click)="onCreate()">
+      <button 
+        nz-button 
+        nzType="primary" 
+        class="action-btn create-btn" 
+        (click)="onCreate()"
+        [attr.aria-label]="createButtonAriaLabel">
         <span class="create-icon">+</span>
       </button>
     </div>

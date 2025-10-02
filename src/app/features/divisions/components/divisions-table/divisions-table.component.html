@@ -19,7 +19,7 @@
         <!-- División Column -->
         <th class="division-col" *ngIf="selectedColumns.includes('division')">
           <div class="header-cell">
-            <span class="header-title">División</span>
+            <span class="header-title">{{ getColumnLabel('division') }}</span>
             <div class="header-actions">
               <span nz-icon nzType="filter"
                     class="filter-icon"
@@ -28,38 +28,42 @@
                     [nzDropdownMenu]="divisionFilterMenu"
                     nzTrigger="click"
                     nzPlacement="bottomRight"
+                    [attr.aria-label]="'Filtrar ' + getColumnLabel('division')"
                     (click)="onFilterIconClick($event, 'name')"></span>
               <div class="sort-icons">
                 <span nz-icon nzType="caret-up"
                       class="sort-icon"
                       [class.active]="sorting.field === 'name' && sorting.direction === 'asc'"
+                      [attr.aria-label]="'Ordenar ' + getColumnLabel('division') + ' ascendente'"
                       (click)="onSort('name', 'asc')"></span>
                 <span nz-icon nzType="caret-down"
                       class="sort-icon"
                       [class.active]="sorting.field === 'name' && sorting.direction === 'desc'"
+                      [attr.aria-label]="'Ordenar ' + getColumnLabel('division') + ' descendente'"
                       (click)="onSort('name', 'desc')"></span>
               </div>
             </div>
           </div>
           <nz-dropdown-menu #divisionFilterMenu="nzDropdownMenu">
             <div class="filter-dropdown-panel">
-              <div class="filter-option-title">División:</div>
+              <div class="filter-option-title">{{ filterLabels.division }}</div>
               <div class="filter-search-specific">
                 <nz-input-group [nzSuffix]="nameSearchSuffix" class="name-search-input">
                   <input
                     type="text"
                     nz-input
-                    placeholder="Buscar división por nombre"
+                    [placeholder]="filterLabels.searchPlaceholder"
                     [(ngModel)]="nameSearchValue"
+                    [attr.aria-label]="filterLabels.searchPlaceholder"
                     (keyup.enter)="onNameSearch()" />
                 </nz-input-group>
                 <ng-template #nameSearchSuffix>
-                  <span nz-icon nzType="search" class="search-specific-icon" (click)="onNameSearch()"></span>
+                  <span nz-icon nzType="search" class="search-specific-icon" (click)="onNameSearch()" aria-label="Buscar"></span>
                 </ng-template>
               </div>
               <div class="filter-dropdown-actions">
-                <button nz-button nzSize="small" nzType="default" (click)="clearNameFilter()">Reiniciar</button>
-                <button nz-button nzSize="small" nzType="primary" (click)="onNameSearch()">Aplicar</button>
+                <button nz-button nzSize="small" nzType="default" (click)="clearNameFilter()">{{ filterLabels.resetButton }}</button>
+                <button nz-button nzSize="small" nzType="primary" (click)="onNameSearch()">{{ filterLabels.applyButton }}</button>
               </div>
             </div>
           </nz-dropdown-menu>
@@ -68,7 +72,7 @@
         <!-- División Superior Column -->
         <th class="parent-col" *ngIf="selectedColumns.includes('divisionSuperior')">
           <div class="header-cell">
-            <span class="header-title">División superior</span>
+            <span class="header-title">{{ getColumnLabel('divisionSuperior') }}</span>
             <div class="header-actions">
               <span nz-icon nzType="filter"
                     class="filter-icon"
@@ -77,22 +81,25 @@
                     [nzDropdownMenu]="parentFilterMenu"
                     nzTrigger="click"
                     nzPlacement="bottomRight"
+                    [attr.aria-label]="'Filtrar ' + getColumnLabel('divisionSuperior')"
                     (click)="onFilterIconClick($event, 'parent')"></span>
               <div class="sort-icons">
                 <span nz-icon nzType="caret-up"
                       class="sort-icon"
                       [class.active]="sorting.field === 'parentId' && sorting.direction === 'asc'"
+                      [attr.aria-label]="'Ordenar ' + getColumnLabel('divisionSuperior') + ' ascendente'"
                       (click)="onSort('parentId', 'asc')"></span>
                 <span nz-icon nzType="caret-down"
                       class="sort-icon"
                       [class.active]="sorting.field === 'parentId' && sorting.direction === 'desc'"
+                      [attr.aria-label]="'Ordenar ' + getColumnLabel('divisionSuperior') + ' descendente'"
                       (click)="onSort('parentId', 'desc')"></span>
               </div>
             </div>
           </div>
           <nz-dropdown-menu #parentFilterMenu="nzDropdownMenu">
             <div class="filter-dropdown-panel">
-              <div class="filter-option-title">Divisiones superiores:</div>
+              <div class="filter-option-title">{{ filterLabels.divisionSuperior }}</div>
               <div class="division-parent-options">
                 <div class="parent-option"
                      *ngFor="let parent of parentDivisions"
@@ -101,12 +108,12 @@
                   {{ parent.name }}
                 </div>
                 <div class="parent-option" (click)="onParentFilter(null)" [class.selected]="filters.parentId === undefined">
-                  Sin división superior
+                  {{ filterLabels.noDivisionSuperior }}
                 </div>
               </div>
               <div class="filter-dropdown-actions">
-                <button nz-button nzSize="small" nzType="default" (click)="onParentFilter(null)">Reiniciar</button>
-                <button nz-button nzSize="small" nzType="primary">Aplicar</button>
+                <button nz-button nzSize="small" nzType="default" (click)="onParentFilter(null)">{{ filterLabels.resetButton }}</button>
+                <button nz-button nzSize="small" nzType="primary">{{ filterLabels.applyButton }}</button>
               </div>
             </div>
           </nz-dropdown-menu>
@@ -115,16 +122,18 @@
         <!-- Colaboradores Column -->
         <th class="collaborators-col" *ngIf="selectedColumns.includes('colaboradores')">
           <div class="header-cell">
-            <span class="header-title">Colaboradores</span>
+            <span class="header-title">{{ getColumnLabel('colaboradores') }}</span>
             <div class="header-actions">
               <div class="sort-icons">
                 <span nz-icon nzType="caret-up"
                       class="sort-icon"
                       [class.active]="sorting.field === 'collaborators' && sorting.direction === 'asc'"
+                      [attr.aria-label]="'Ordenar ' + getColumnLabel('colaboradores') + ' ascendente'"
                       (click)="onSort('collaborators', 'asc')"></span>
                 <span nz-icon nzType="caret-down"
                       class="sort-icon"
                       [class.active]="sorting.field === 'collaborators' && sorting.direction === 'desc'"
+                      [attr.aria-label]="'Ordenar ' + getColumnLabel('colaboradores') + ' descendente'"
                       (click)="onSort('collaborators', 'desc')"></span>
               </div>
             </div>
@@ -134,16 +143,18 @@
         <!-- Nivel Column -->
         <th class="level-col" *ngIf="selectedColumns.includes('nivel')">
           <div class="header-cell">
-            <span class="header-title">Nivel</span>
+            <span class="header-title">{{ getColumnLabel('nivel') }}</span>
             <div class="header-actions">
               <div class="sort-icons">
                 <span nz-icon nzType="caret-up"
                       class="sort-icon"
                       [class.active]="sorting.field === 'level' && sorting.direction === 'asc'"
+                      [attr.aria-label]="'Ordenar ' + getColumnLabel('nivel') + ' ascendente'"
                       (click)="onSort('level', 'asc')"></span>
                 <span nz-icon nzType="caret-down"
                       class="sort-icon"
                       [class.active]="sorting.field === 'level' && sorting.direction === 'desc'"
+                      [attr.aria-label]="'Ordenar ' + getColumnLabel('nivel') + ' descendente'"
                       (click)="onSort('level', 'desc')"></span>
               </div>
               <span nz-icon nzType="filter"
@@ -153,12 +164,13 @@
                     [nzDropdownMenu]="levelFilterMenu"
                     nzTrigger="click"
                     nzPlacement="bottomRight"
+                    [attr.aria-label]="'Filtrar ' + getColumnLabel('nivel')"
                     (click)="onFilterIconClick($event, 'level')"></span>
             </div>
           </div>
           <nz-dropdown-menu #levelFilterMenu="nzDropdownMenu">
             <div class="filter-dropdown-panel">
-              <div class="filter-option-title">Niveles:</div>
+              <div class="filter-option-title">{{ filterLabels.nivel }}</div>
               <div class="level-options">
                 <div class="level-option"
                     *ngFor="let level of levelOptions"
@@ -168,8 +180,8 @@
                 </div>
               </div>
               <div class="filter-dropdown-actions">
-                <button nz-button nzSize="small" nzType="default" (click)="onLevelFilter(null)">Reiniciar</button>
-                <button nz-button nzSize="small" nzType="primary">Aplicar</button>
+                <button nz-button nzSize="small" nzType="default" (click)="onLevelFilter(null)">{{ filterLabels.resetButton }}</button>
+                <button nz-button nzSize="small" nzType="primary">{{ filterLabels.applyButton }}</button>
               </div>
             </div>
           </nz-dropdown-menu>
@@ -178,7 +190,7 @@
         <!-- Subdivisiones Column -->
         <th class="subdivisions-col" *ngIf="selectedColumns.includes('subdivisiones')">
           <div class="header-cell">
-            <span class="header-title">Subdivisiones</span>
+            <span class="header-title">{{ getColumnLabel('subdivisiones') }}</span>
             <div class="header-actions">
               <div class="sort-icons">
                 <span nz-icon nzType="caret-up" class="sort-icon"></span>
@@ -191,7 +203,7 @@
         <!-- Embajadores Column -->
         <th class="ambassadors-col" *ngIf="selectedColumns.includes('embajadores')">
           <div class="header-cell">
-            <span class="header-title">Embajadores</span>
+            <span class="header-title">{{ getColumnLabel('embajadores') }}</span>
           </div>
         </th>
       </tr>

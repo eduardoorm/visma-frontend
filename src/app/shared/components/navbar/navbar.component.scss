@@ -19,7 +19,7 @@
 
     .logo {
       .logo-img {
-        height: 28px;
+        height: 20px;
       }
     }
 
@@ -31,7 +31,7 @@
         color: rgba(255, 255, 255, 0.8);
         font-size: 14px;
         text-decoration: none;
-        padding: 4px 8px;
+        padding:10px 8px;
         display: flex;
         align-items: center;
         gap: 4px;
@@ -43,6 +43,8 @@
 
         &:hover {
           color: white;
+          background-color: rgba(255, 255, 255, 0.086);
+          border-radius: 4px;
         }
 
         .nav-dropdown-icon {
@@ -130,9 +132,10 @@
 
     .logo-right {
       margin-left: 10px;
-
+      background-color: white;
+      padding: 4px 8px;
       .logo-img {
-        height: 30px;
+        height: 15px;
       }
     }
   }

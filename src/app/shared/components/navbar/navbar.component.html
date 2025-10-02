@@ -9,17 +9,17 @@
 
       <!-- Enlaces de navegación -->
       <div class="nav-links">
-        <a 
-          *ngFor="let link of navLinks" 
-          [href]="link.href" 
+        <a
+          *ngFor="let link of navLinks"
+          [href]="link.href"
           class="nav-link"
           [class.active]="link.active"
           [attr.aria-label]="link.ariaLabel || link.label">
           {{ link.label }}
-          <span 
-            *ngIf="link.hasDropdown" 
-            nz-icon 
-            nzType="down" 
+          <span
+            *ngIf="link.hasDropdown"
+            nz-icon
+            nzType="down"
             class="nav-dropdown-icon"
             aria-hidden="true"></span>
         </a>
@@ -29,10 +29,10 @@
     <div class="menu-right">
       <!-- Iconos de acciones -->
       <div class="action-icons">
-        <button 
+        <button
           *ngFor="let icon of actionIcons"
-          nz-button 
-          nzType="text" 
+          nz-button
+          nzType="text"
           class="icon-button"
           [class.notification-button]="icon.badge !== undefined"
           [attr.aria-label]="icon.ariaLabel"
@@ -44,17 +44,17 @@
 
       <!-- Información de usuario -->
       <div class="user-profile">
+        <div class="user-avatar">
+          <img
+            [src]="userInfo.avatarUrl || 'assets/images/profile-image.png'"
+            [alt]="'Avatar de ' + userInfo.name"
+            class="avatar-img" />
+        </div>
         <div class="user-info">
           <span class="user-name" [attr.aria-label]="userInfo.ariaLabel || 'Usuario: ' + userInfo.name">
             {{ userInfo.name }}
           </span>
           <span nz-icon nzType="down" class="user-dropdown-icon" aria-hidden="true"></span>
-        </div>
-        <div class="user-avatar">
-          <img 
-            [src]="userInfo.avatarUrl || 'assets/images/profile-image.png'" 
-            [alt]="'Avatar de ' + userInfo.name" 
-            class="avatar-img" />
         </div>
       </div>
 

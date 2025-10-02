@@ -28,6 +28,8 @@
                     [nzDropdownMenu]="divisionFilterMenu"
                     nzTrigger="click"
                     nzPlacement="bottomRight"
+                    [nzVisible]="divisionFilterVisible"
+                    (nzVisibleChange)="divisionFilterVisible = $event"
                     [attr.aria-label]="'Filtrar ' + getColumnLabel('division')"
                     (click)="onFilterIconClick($event, 'name')"></span>
               <div class="sort-icons">
@@ -61,9 +63,17 @@
                   <span nz-icon nzType="search" class="search-specific-icon" (click)="onNameSearch()" aria-label="Buscar"></span>
                 </ng-template>
               </div>
+              <div class="division-options" *ngIf="divisions.length">
+                <div class="division-option"
+                     *ngFor="let division of divisions | filter: nameSearchValue"
+                     (click)="onDivisionFilter(division.name)"
+                     [class.selected]="filters.search === division.name">
+                  {{ division.name }}
+                </div>
+              </div>
               <div class="filter-dropdown-actions">
-                <button nz-button nzSize="small" nzType="default" (click)="clearNameFilter()">{{ filterLabels.resetButton }}</button>
-                <button nz-button nzSize="small" nzType="primary" (click)="onNameSearch()">{{ filterLabels.applyButton }}</button>
+                <button nz-button nzSize="small" nzType="default" (click)="clearNameFilter(); divisionFilterVisible = false">{{ filterLabels.resetButton }}</button>
+                <button nz-button nzSize="small" nzType="primary" (click)="onNameSearch(); divisionFilterVisible = false">{{ filterLabels.applyButton }}</button>
               </div>
             </div>
           </nz-dropdown-menu>
@@ -81,6 +91,8 @@
                     [nzDropdownMenu]="parentFilterMenu"
                     nzTrigger="click"
                     nzPlacement="bottomRight"
+                    [nzVisible]="parentFilterVisible"
+                    (nzVisibleChange)="parentFilterVisible = $event"
                     [attr.aria-label]="'Filtrar ' + getColumnLabel('divisionSuperior')"
                     (click)="onFilterIconClick($event, 'parent')"></span>
               <div class="sort-icons">
@@ -100,9 +112,23 @@
           <nz-dropdown-menu #parentFilterMenu="nzDropdownMenu">
             <div class="filter-dropdown-panel">
               <div class="filter-option-title">{{ filterLabels.divisionSuperior }}</div>
-              <div class="division-parent-options">
+              <div class="filter-search-specific">
+                <nz-input-group [nzSuffix]="parentSearchSuffix" class="name-search-input">
+                  <input
+                    type="text"
+                    nz-input
+                    [placeholder]="filterLabels.searchPlaceholder"
+                    [(ngModel)]="parentSearchValue"
+                    [attr.aria-label]="filterLabels.searchPlaceholder"
+                  />
+                </nz-input-group>
+                <ng-template #parentSearchSuffix>
+                  <span nz-icon nzType="search" class="search-specific-icon" aria-label="Buscar"></span>
+                </ng-template>
+              </div>
+              <div class="division-parent-options" *ngIf="parentDivisions.length">
                 <div class="parent-option"
-                     *ngFor="let parent of parentDivisions"
+                     *ngFor="let parent of parentDivisions | filter: parentSearchValue"
                      (click)="onParentFilter(parent.id)"
                      [class.selected]="filters.parentId === parent.id">
                   {{ parent.name }}
@@ -112,8 +138,8 @@
                 </div>
               </div>
               <div class="filter-dropdown-actions">
-                <button nz-button nzSize="small" nzType="default" (click)="onParentFilter(null)">{{ filterLabels.resetButton }}</button>
-                <button nz-button nzSize="small" nzType="primary">{{ filterLabels.applyButton }}</button>
+                <button nz-button nzSize="small" nzType="default" (click)="clearParentFilter(); parentFilterVisible = false">{{ filterLabels.resetButton }}</button>
+                <button nz-button nzSize="small" nzType="primary" (click)="parentFilterVisible = false">{{ filterLabels.applyButton }}</button>
               </div>
             </div>
           </nz-dropdown-menu>

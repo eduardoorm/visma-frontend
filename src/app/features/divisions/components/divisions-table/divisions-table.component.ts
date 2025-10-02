@@ -20,6 +20,7 @@ import {
   DivisionTableColumn
 } from '../../models/division.interface';
 import { FilterLabels, LevelOption } from '../../models/table-config.interface';
+import { FilterPipe } from '../../pipes/filter.pipe';
 
 @Component({
   selector: 'app-divisions-table',
@@ -33,13 +34,18 @@ import { FilterLabels, LevelOption } from '../../models/table-config.interface';
     NzDropDownModule,
     NzMenuModule,
     NzIconModule,
-    NzCheckboxModule
+    NzCheckboxModule,
+    FilterPipe
   ],
   templateUrl: './divisions-table.component.html',
   styleUrls: ['./divisions-table.component.scss']
 })
 export class DivisionsTableComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
+
+  parentSearchValue: string = '';
+  divisionFilterVisible = false;
+  parentFilterVisible = false;
 
   @Input() divisions: DivisionResponseDto[] = [];
   @Input() loading = false;
@@ -119,6 +125,16 @@ export class DivisionsTableComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Maneja el filtro por nombre de división seleccionada
+   */
+  onDivisionFilter(divisionName: string): void {
+    this.nameSearchValue = divisionName;
+    const updatedFilters = { ...this.filters, search: divisionName };
+    this.filterChange.emit(updatedFilters);
+    this.divisionFilterVisible = false;
+  }
+
+  /**
    * Maneja el ordenamiento de columnas
    */
   onSort(column: string, direction: 'asc' | 'desc' | null): void {
@@ -143,12 +159,17 @@ export class DivisionsTableComponent implements OnInit, OnDestroy {
     this.filterChange.emit(updatedFilters);
   }
 
-  /**
-   * Limpia el filtro de nombre específico
-   */
+  // Limpia solo el filtro de búsqueda de división
   clearNameFilter(): void {
     this.nameSearchValue = '';
     const updatedFilters = { ...this.filters, search: undefined };
+    this.filterChange.emit(updatedFilters);
+  }
+
+  // Limpia solo el filtro de división superior
+  clearParentFilter(): void {
+    this.parentSearchValue = '';
+    const updatedFilters = { ...this.filters, parentId: undefined };
     this.filterChange.emit(updatedFilters);
   }
 

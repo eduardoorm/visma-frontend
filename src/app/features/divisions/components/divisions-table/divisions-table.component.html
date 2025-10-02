@@ -1,155 +1,3 @@
-<!-- Menú Principal -->
-<div class="main-menu">
-  <div class="menu-container">
-    <div class="menu-left">
-      <!-- Logo Mandü -->
-      <div class="logo">
-        <img src="assets/images/logo-white.svg" alt="Mandü" class="logo-img" />
-      </div>
-
-      <!-- Enlaces de navegación -->
-      <div class="nav-links">
-        <a href="#" class="nav-link">Dashboard</a>
-        <a href="#" class="nav-link active">Organización</a>
-        <div class="dropdown-link">
-          <a href="#" class="nav-link">
-            Modelos
-            <span nz-icon nzType="down" class="nav-dropdown-icon"></span>
-          </a>
-        </div>
-        <div class="dropdown-link">
-          <a href="#" class="nav-link">
-            Seguimiento
-            <span nz-icon nzType="down" class="nav-dropdown-icon"></span>
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <div class="menu-right">
-      <!-- Iconos de acciones -->
-      <div class="action-icons">
-        <button nz-button nzType="text" class="icon-button">
-          <span nz-icon nzType="mail" class="header-icon"></span>
-        </button>
-        <button nz-button nzType="text" class="icon-button">
-          <span nz-icon nzType="question-circle" class="header-icon"></span>
-        </button>
-        <button nz-button nzType="text" class="icon-button notification-button">
-          <span nz-icon nzType="bell" class="header-icon"></span>
-          <span class="notification-badge">1</span>
-        </button>
-      </div>
-
-      <!-- Información de usuario -->
-      <div class="user-profile">
-        <div class="user-info">
-          <span class="user-name">Administrador</span>
-          <span nz-icon nzType="down" class="user-dropdown-icon"></span>
-        </div>
-        <div class="user-avatar">
-          <img src="assets/images/profile-image.png" alt="Usuario" class="avatar-img" />
-        </div>
-      </div>
-
-      <!-- Logo Mandü (derecha) -->
-      <div class="logo-right">
-        <img src="assets/images/logo-mandu.svg" alt="Mandü" class="logo-img" />
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Header Section -->
-<div class="divisions-header">
-  <div class="header-content">
-    <div class="header-left">
-      <div class="breadcrumb">
-        <span class="breadcrumb-item active">Organización</span>
-      </div>
-    </div>
-
-    <div class="header-right">
-
-      <!-- Columns Dropdown (corregido) -->
-      <div class="columns-search-group">
-        <button nz-button nzType="default" class="columns-btn" nz-dropdown [nzDropdownMenu]="columnsMenu">
-          <span>Columnas</span>
-          <span nz-icon nzType="down" class="dropdown-icon"></span>
-        </button>
-        <nz-dropdown-menu #columnsMenu="nzDropdownMenu">
-          <ul nz-menu nzSelectable class="columns-menu">
-            <li nz-menu-item *ngFor="let column of tableColumns"
-                (click)="toggleColumn(column.key)">
-              <label nz-checkbox
-                     [ngModel]="selectedColumns.includes(column.key)"
-                     (ngModelChange)="toggleColumn(column.key)">
-                {{ column.title }}
-              </label>
-            </li>
-          </ul>
-        </nz-dropdown-menu>
-        <!-- Search Input a la derecha -->
-        <nz-input-group [nzSuffix]="searchSuffix" class="search-input">
-          <input
-            type="text"
-            nz-input
-            placeholder="Buscar divisiones por nombre..."
-            [(ngModel)]="searchValue"
-            (ngModelChange)="onSearch($event)"
-            (keyup.enter)="onSearch(searchValue)"
-          />
-        </nz-input-group>
-        <ng-template #searchSuffix>
-          <span nz-icon nzType="search" class="search-icon" (click)="onSearch(searchValue)"></span>
-        </ng-template>
-      </div>
-
-      <!-- Action Buttons -->
-      <button nz-button nzType="default" class="action-btn import-btn" (click)="importDivisions()">
-        <span nz-icon nzType="upload" class="btn-icon"></span>
-      </button>
-
-      <button nz-button nzType="default" class="action-btn export-btn" (click)="exportDivisions()">
-        <span nz-icon nzType="download" class="btn-icon"></span>
-      </button>
-
-      <button nz-button nzType="primary" class="action-btn create-btn" (click)="createDivision()">
-        <span class="create-icon">+</span>
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- View Toggle -->
-<div class="table-controls">
-  <div class="controls-wrapper">
-    <!-- Pestañas de navegación secundaria -->
-    <div class="secondary-tabs">
-      <a href="#" class="tab-link active">Divisiones</a>
-      <a href="#" class="tab-link">Colaboradores</a>
-    </div>
-
-    <!-- Toggle entre vista lista y árbol -->
-    <div class="view-toggle">
-      <div class="toggle-container">
-        <button
-          class="toggle-option"
-          [class.active]="viewMode === 'list'"
-          (click)="viewMode = 'list'; loadDivisions()">
-          Listado
-        </button>
-        <button
-          class="toggle-option"
-          [class.active]="viewMode === 'tree'"
-          (click)="viewMode = 'tree'; loadDivisions()">
-          Árbol
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- Main Table -->
 <div class="table-container">
   <nz-table
@@ -258,7 +106,7 @@
               </div>
               <div class="filter-dropdown-actions">
                 <button nz-button nzSize="small" nzType="default" (click)="onParentFilter(null)">Reiniciar</button>
-                <button nz-button nzSize="small" nzType="primary" (click)="loadDivisions()">Aplicar</button>
+                <button nz-button nzSize="small" nzType="primary">Aplicar</button>
               </div>
             </div>
           </nz-dropdown-menu>
@@ -321,7 +169,7 @@
               </div>
               <div class="filter-dropdown-actions">
                 <button nz-button nzSize="small" nzType="default" (click)="onLevelFilter(null)">Reiniciar</button>
-                <button nz-button nzSize="small" nzType="primary" (click)="loadDivisions()">Aplicar</button>
+                <button nz-button nzSize="small" nzType="primary">Aplicar</button>
               </div>
             </div>
           </nz-dropdown-menu>
@@ -396,53 +244,4 @@
       </tr>
     </tbody>
   </nz-table>
-</div>
-
-<!-- Footer with Pagination -->
-<div class="table-footer">
-  <div class="footer-left">
-    <span class="total-count">Total colaboradores: {{ total }}</span>
-  </div>
-
-  <div class="footer-right">
-    <div class="page-size-selector">
-      <span class="page-size-text">{{ pageSize }} / página</span>
-      <nz-select
-        [(ngModel)]="pageSize"
-        (ngModelChange)="onPageSizeChange($event)"
-        class="page-size-select"
-        nzBorderless>
-        <nz-option [nzValue]="10" nzLabel="10"></nz-option>
-        <nz-option [nzValue]="20" nzLabel="20"></nz-option>
-        <nz-option [nzValue]="50" nzLabel="50"></nz-option>
-        <nz-option [nzValue]="100" nzLabel="100"></nz-option>
-      </nz-select>
-    </div>
-
-    <nz-pagination
-      [(nzPageIndex)]="pageIndex"
-      [nzTotal]="total"
-      [nzPageSize]="pageSize"
-      [nzShowSizeChanger]="false"
-      [nzShowQuickJumper]="false"
-      [nzItemRender]="renderItemTemplate"
-      (nzPageIndexChange)="onPageChange($event)"
-      class="pagination">
-    </nz-pagination>
-
-    <ng-template #renderItemTemplate let-type let-page="page">
-      <ng-container [ngSwitch]="type">
-        <a *ngSwitchCase="'prev'" class="pagination-prev-btn">
-          <span nz-icon nzType="left"></span>
-        </a>
-        <a *ngSwitchCase="'next'" class="pagination-next-btn">
-          <span nz-icon nzType="right"></span>
-        </a>
-        <a *ngSwitchCase="'page'" class="pagination-number">
-          {{ page }}
-        </a>
-        <span *ngSwitchDefault class="pagination-ellipsis">...</span>
-      </ng-container>
-    </ng-template>
-  </div>
 </div>

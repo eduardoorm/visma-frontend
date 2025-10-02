@@ -1,0 +1,134 @@
+.table-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 32px;
+  background: white;
+  border-top: 1px solid #EDE9E9;
+  margin-top: 0;
+
+  .footer-left {
+    .total-count {
+      color: #555155;
+      font-size: 13px;
+    }
+  }
+
+  .footer-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    .page-size-selector {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      .page-size-text {
+        color: #555155;
+        font-size: 13px;
+      }
+
+      .page-size-select {
+        width: 70px;
+
+        ::ng-deep .ant-select-selector {
+          border: 1px solid #EDE9E9;
+          border-radius: 3px;
+          height: 28px;
+          padding: 0 8px;
+          font-size: 13px;
+        }
+
+        ::ng-deep .ant-select-arrow {
+          color: #AFA9AF;
+        }
+      }
+    }
+
+    .pagination {
+      ::ng-deep .ant-pagination-item {
+        border: 1px solid #EDE9E9;
+        border-radius: 3px;
+        min-width: 28px;
+        height: 28px;
+        line-height: 26px;
+        margin-right: 4px;
+
+        a {
+          color: #555155;
+          font-size: 13px;
+        }
+
+        &.ant-pagination-item-active {
+          background: #2E52F8;
+          border-color: #2E52F8;
+
+          a {
+            color: white;
+          }
+        }
+      }
+
+      ::ng-deep .ant-pagination-prev,
+      ::ng-deep .ant-pagination-next {
+        .ant-pagination-item-link {
+          border: 1px solid #EDE9E9;
+          border-radius: 3px;
+          min-width: 28px;
+          height: 28px;
+          line-height: 26px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          .anticon {
+            color: #555155;
+            font-size: 12px;
+          }
+        }
+
+        &:hover .ant-pagination-item-link {
+          border-color: #2E52F8;
+
+          .anticon {
+            color: #2E52F8;
+          }
+        }
+      }
+
+      ::ng-deep .ant-pagination-disabled {
+        .ant-pagination-item-link {
+          border-color: #EDE9E9;
+
+          .anticon {
+            color: #D9D9D9;
+          }
+        }
+
+        &:hover .ant-pagination-item-link {
+          border-color: #EDE9E9;
+
+          .anticon {
+            color: #D9D9D9;
+          }
+        }
+      }
+    }
+  }
+}
+
+.pagination-prev-btn,
+.pagination-next-btn,
+.pagination-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #555155;
+  font-size: 13px;
+}
+
+.pagination-ellipsis {
+  color: #555155;
+  font-size: 13px;
+}

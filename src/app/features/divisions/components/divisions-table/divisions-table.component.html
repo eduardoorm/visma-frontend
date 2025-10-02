@@ -1,0 +1,448 @@
+<!-- Menú Principal -->
+<div class="main-menu">
+  <div class="menu-container">
+    <div class="menu-left">
+      <!-- Logo Mandü -->
+      <div class="logo">
+        <img src="assets/images/logo-white.svg" alt="Mandü" class="logo-img" />
+      </div>
+
+      <!-- Enlaces de navegación -->
+      <div class="nav-links">
+        <a href="#" class="nav-link">Dashboard</a>
+        <a href="#" class="nav-link active">Organización</a>
+        <div class="dropdown-link">
+          <a href="#" class="nav-link">
+            Modelos
+            <span nz-icon nzType="down" class="nav-dropdown-icon"></span>
+          </a>
+        </div>
+        <div class="dropdown-link">
+          <a href="#" class="nav-link">
+            Seguimiento
+            <span nz-icon nzType="down" class="nav-dropdown-icon"></span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-right">
+      <!-- Iconos de acciones -->
+      <div class="action-icons">
+        <button nz-button nzType="text" class="icon-button">
+          <span nz-icon nzType="mail" class="header-icon"></span>
+        </button>
+        <button nz-button nzType="text" class="icon-button">
+          <span nz-icon nzType="question-circle" class="header-icon"></span>
+        </button>
+        <button nz-button nzType="text" class="icon-button notification-button">
+          <span nz-icon nzType="bell" class="header-icon"></span>
+          <span class="notification-badge">1</span>
+        </button>
+      </div>
+
+      <!-- Información de usuario -->
+      <div class="user-profile">
+        <div class="user-info">
+          <span class="user-name">Administrador</span>
+          <span nz-icon nzType="down" class="user-dropdown-icon"></span>
+        </div>
+        <div class="user-avatar">
+          <img src="assets/images/profile-image.png" alt="Usuario" class="avatar-img" />
+        </div>
+      </div>
+
+      <!-- Logo Mandü (derecha) -->
+      <div class="logo-right">
+        <img src="assets/images/logo-mandu.svg" alt="Mandü" class="logo-img" />
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Header Section -->
+<div class="divisions-header">
+  <div class="header-content">
+    <div class="header-left">
+      <div class="breadcrumb">
+        <span class="breadcrumb-item active">Organización</span>
+      </div>
+    </div>
+
+    <div class="header-right">
+
+      <!-- Columns Dropdown (corregido) -->
+      <div class="columns-search-group">
+        <button nz-button nzType="default" class="columns-btn" nz-dropdown [nzDropdownMenu]="columnsMenu">
+          <span>Columnas</span>
+          <span nz-icon nzType="down" class="dropdown-icon"></span>
+        </button>
+        <nz-dropdown-menu #columnsMenu="nzDropdownMenu">
+          <ul nz-menu nzSelectable class="columns-menu">
+            <li nz-menu-item *ngFor="let column of tableColumns"
+                (click)="toggleColumn(column.key)">
+              <label nz-checkbox
+                     [ngModel]="selectedColumns.includes(column.key)"
+                     (ngModelChange)="toggleColumn(column.key)">
+                {{ column.title }}
+              </label>
+            </li>
+          </ul>
+        </nz-dropdown-menu>
+        <!-- Search Input a la derecha -->
+        <nz-input-group [nzSuffix]="searchSuffix" class="search-input">
+          <input
+            type="text"
+            nz-input
+            placeholder="Buscar divisiones por nombre..."
+            [(ngModel)]="searchValue"
+            (ngModelChange)="onSearch($event)"
+            (keyup.enter)="onSearch(searchValue)"
+          />
+        </nz-input-group>
+        <ng-template #searchSuffix>
+          <span nz-icon nzType="search" class="search-icon" (click)="onSearch(searchValue)"></span>
+        </ng-template>
+      </div>
+
+      <!-- Action Buttons -->
+      <button nz-button nzType="default" class="action-btn import-btn" (click)="importDivisions()">
+        <span nz-icon nzType="upload" class="btn-icon"></span>
+      </button>
+
+      <button nz-button nzType="default" class="action-btn export-btn" (click)="exportDivisions()">
+        <span nz-icon nzType="download" class="btn-icon"></span>
+      </button>
+
+      <button nz-button nzType="primary" class="action-btn create-btn" (click)="createDivision()">
+        <span class="create-icon">+</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- View Toggle -->
+<div class="table-controls">
+  <div class="controls-wrapper">
+    <!-- Pestañas de navegación secundaria -->
+    <div class="secondary-tabs">
+      <a href="#" class="tab-link active">Divisiones</a>
+      <a href="#" class="tab-link">Colaboradores</a>
+    </div>
+
+    <!-- Toggle entre vista lista y árbol -->
+    <div class="view-toggle">
+      <div class="toggle-container">
+        <button
+          class="toggle-option"
+          [class.active]="viewMode === 'list'"
+          (click)="viewMode = 'list'; loadDivisions()">
+          Listado
+        </button>
+        <button
+          class="toggle-option"
+          [class.active]="viewMode === 'tree'"
+          (click)="viewMode = 'tree'; loadDivisions()">
+          Árbol
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Table -->
+<div class="table-container">
+  <nz-table
+    #basicTable
+    [nzData]="divisions"
+    [nzLoading]="loading"
+    [nzShowPagination]="false"
+    [nzScroll]="{ x: '1200px' }"
+    class="divisions-table">
+
+    <!-- Table Header -->
+    <thead>
+      <tr class="table-header">
+        <!-- Checkbox Column -->
+        <th class="checkbox-col">
+          <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="onAllChecked($event)"></label>
+        </th>
+
+        <!-- División Column -->
+        <th class="division-col" *ngIf="selectedColumns.includes('division')">
+          <div class="header-cell">
+            <span class="header-title">División</span>
+            <div class="header-actions">
+              <span nz-icon nzType="filter"
+                    class="filter-icon"
+                    [class.active]="filters.search || activeFilterColumn === 'name'"
+                    nz-dropdown
+                    [nzDropdownMenu]="divisionFilterMenu"
+                    nzTrigger="click"
+                    nzPlacement="bottomRight"
+                    (click)="onFilterIconClick($event, 'name')"></span>
+              <div class="sort-icons">
+                <span nz-icon nzType="caret-up"
+                      class="sort-icon"
+                      [class.active]="sorting.field === 'name' && sorting.direction === 'asc'"
+                      (click)="onSort('name', 'asc')"></span>
+                <span nz-icon nzType="caret-down"
+                      class="sort-icon"
+                      [class.active]="sorting.field === 'name' && sorting.direction === 'desc'"
+                      (click)="onSort('name', 'desc')"></span>
+              </div>
+            </div>
+          </div>
+          <nz-dropdown-menu #divisionFilterMenu="nzDropdownMenu">
+            <div class="filter-dropdown-panel">
+              <div class="filter-option-title">División:</div>
+              <div class="filter-search-specific">
+                <nz-input-group [nzSuffix]="nameSearchSuffix" class="name-search-input">
+                  <input
+                    type="text"
+                    nz-input
+                    placeholder="Buscar división por nombre"
+                    [(ngModel)]="nameSearchValue"
+                    (keyup.enter)="onNameSearch()" />
+                </nz-input-group>
+                <ng-template #nameSearchSuffix>
+                  <span nz-icon nzType="search" class="search-specific-icon" (click)="onNameSearch()"></span>
+                </ng-template>
+              </div>
+              <div class="filter-dropdown-actions">
+                <button nz-button nzSize="small" nzType="default" (click)="clearNameFilter()">Reiniciar</button>
+                <button nz-button nzSize="small" nzType="primary" (click)="onNameSearch()">Aplicar</button>
+              </div>
+            </div>
+          </nz-dropdown-menu>
+        </th>
+
+        <!-- División Superior Column -->
+        <th class="parent-col" *ngIf="selectedColumns.includes('divisionSuperior')">
+          <div class="header-cell">
+            <span class="header-title">División superior</span>
+            <div class="header-actions">
+              <span nz-icon nzType="filter"
+                    class="filter-icon"
+                    [class.active]="filters.parentId || activeFilterColumn === 'parent'"
+                    nz-dropdown
+                    [nzDropdownMenu]="parentFilterMenu"
+                    nzTrigger="click"
+                    nzPlacement="bottomRight"
+                    (click)="onFilterIconClick($event, 'parent')"></span>
+              <div class="sort-icons">
+                <span nz-icon nzType="caret-up"
+                      class="sort-icon"
+                      [class.active]="sorting.field === 'parentId' && sorting.direction === 'asc'"
+                      (click)="onSort('parentId', 'asc')"></span>
+                <span nz-icon nzType="caret-down"
+                      class="sort-icon"
+                      [class.active]="sorting.field === 'parentId' && sorting.direction === 'desc'"
+                      (click)="onSort('parentId', 'desc')"></span>
+              </div>
+            </div>
+          </div>
+          <nz-dropdown-menu #parentFilterMenu="nzDropdownMenu">
+            <div class="filter-dropdown-panel">
+              <div class="filter-option-title">Divisiones superiores:</div>
+              <div class="division-parent-options">
+                <div class="parent-option"
+                     *ngFor="let parent of parentDivisions"
+                     (click)="onParentFilter(parent.id)"
+                     [class.selected]="filters.parentId === parent.id">
+                  {{ parent.name }}
+                </div>
+                <div class="parent-option" (click)="onParentFilter(null)" [class.selected]="filters.parentId === undefined">
+                  Sin división superior
+                </div>
+              </div>
+              <div class="filter-dropdown-actions">
+                <button nz-button nzSize="small" nzType="default" (click)="onParentFilter(null)">Reiniciar</button>
+                <button nz-button nzSize="small" nzType="primary" (click)="loadDivisions()">Aplicar</button>
+              </div>
+            </div>
+          </nz-dropdown-menu>
+        </th>
+
+        <!-- Colaboradores Column -->
+        <th class="collaborators-col" *ngIf="selectedColumns.includes('colaboradores')">
+          <div class="header-cell">
+            <span class="header-title">Colaboradores</span>
+            <div class="header-actions">
+              <div class="sort-icons">
+                <span nz-icon nzType="caret-up"
+                      class="sort-icon"
+                      [class.active]="sorting.field === 'collaborators' && sorting.direction === 'asc'"
+                      (click)="onSort('collaborators', 'asc')"></span>
+                <span nz-icon nzType="caret-down"
+                      class="sort-icon"
+                      [class.active]="sorting.field === 'collaborators' && sorting.direction === 'desc'"
+                      (click)="onSort('collaborators', 'desc')"></span>
+              </div>
+            </div>
+          </div>
+        </th>
+
+        <!-- Nivel Column -->
+        <th class="level-col" *ngIf="selectedColumns.includes('nivel')">
+          <div class="header-cell">
+            <span class="header-title">Nivel</span>
+            <div class="header-actions">
+              <div class="sort-icons">
+                <span nz-icon nzType="caret-up"
+                      class="sort-icon"
+                      [class.active]="sorting.field === 'level' && sorting.direction === 'asc'"
+                      (click)="onSort('level', 'asc')"></span>
+                <span nz-icon nzType="caret-down"
+                      class="sort-icon"
+                      [class.active]="sorting.field === 'level' && sorting.direction === 'desc'"
+                      (click)="onSort('level', 'desc')"></span>
+              </div>
+              <span nz-icon nzType="filter"
+                    class="filter-icon"
+                    [class.active]="filters.level !== undefined || activeFilterColumn === 'level'"
+                    nz-dropdown
+                    [nzDropdownMenu]="levelFilterMenu"
+                    nzTrigger="click"
+                    nzPlacement="bottomRight"
+                    (click)="onFilterIconClick($event, 'level')"></span>
+            </div>
+          </div>
+          <nz-dropdown-menu #levelFilterMenu="nzDropdownMenu">
+            <div class="filter-dropdown-panel">
+              <div class="filter-option-title">Niveles:</div>
+              <div class="level-options">
+                <div class="level-option"
+                    *ngFor="let level of levelOptions"
+                    (click)="onLevelFilter(level.value)"
+                    [class.selected]="filters.level === level.value">
+                  {{ level.label }}
+                </div>
+              </div>
+              <div class="filter-dropdown-actions">
+                <button nz-button nzSize="small" nzType="default" (click)="onLevelFilter(null)">Reiniciar</button>
+                <button nz-button nzSize="small" nzType="primary" (click)="loadDivisions()">Aplicar</button>
+              </div>
+            </div>
+          </nz-dropdown-menu>
+        </th>
+
+        <!-- Subdivisiones Column -->
+        <th class="subdivisions-col" *ngIf="selectedColumns.includes('subdivisiones')">
+          <div class="header-cell">
+            <span class="header-title">Subdivisiones</span>
+            <div class="header-actions">
+              <div class="sort-icons">
+                <span nz-icon nzType="caret-up" class="sort-icon"></span>
+                <span nz-icon nzType="caret-down" class="sort-icon"></span>
+              </div>
+            </div>
+          </div>
+        </th>
+
+        <!-- Embajadores Column -->
+        <th class="ambassadors-col" *ngIf="selectedColumns.includes('embajadores')">
+          <div class="header-cell">
+            <span class="header-title">Embajadores</span>
+          </div>
+        </th>
+      </tr>
+    </thead>
+
+    <!-- Table Body -->
+    <tbody>
+      <tr *ngFor="let division of divisions; trackBy: trackByDivision" class="table-row">
+        <!-- Checkbox -->
+        <td class="checkbox-cell">
+          <label nz-checkbox [(ngModel)]="checkedMap[division.id]" (ngModelChange)="onItemChecked(division.id, $event)"></label>
+        </td>
+
+        <!-- División Name -->
+        <td class="division-cell" *ngIf="selectedColumns.includes('division')">
+          <div class="division-content">
+            <span class="division-name">{{ division.name }}</span>
+          </div>
+        </td>
+
+        <!-- División Superior -->
+        <td class="parent-cell" *ngIf="selectedColumns.includes('divisionSuperior')">
+          {{ getParentDivisionName(division.parentId) }}
+        </td>
+
+        <!-- Colaboradores -->
+        <td class="collaborators-cell" *ngIf="selectedColumns.includes('colaboradores')">
+          {{ division.collaborators }}
+        </td>
+
+        <!-- Nivel -->
+        <td class="level-cell" *ngIf="selectedColumns.includes('nivel')">
+          {{ division.level }}
+        </td>
+
+        <!-- Subdivisiones -->
+        <td class="subdivisions-cell" *ngIf="selectedColumns.includes('subdivisiones')">
+          <div class="subdivisions-content">
+            <span class="subdivisions-count">{{ getSubdivisionsCount(division) }}</span>
+            <button nz-button nzType="default" nzSize="small" class="add-subdivision-btn" *ngIf="division.level < 5">
+              <span nz-icon nzType="plus"></span>
+            </button>
+          </div>
+        </td>
+
+        <!-- Embajadores -->
+        <td class="ambassadors-cell" *ngIf="selectedColumns.includes('embajadores')">
+          <span class="ambassador-name">{{ division.ambassadorName || '-' }}</span>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+</div>
+
+<!-- Footer with Pagination -->
+<div class="table-footer">
+  <div class="footer-left">
+    <span class="total-count">Total colaboradores: {{ total }}</span>
+  </div>
+
+  <div class="footer-right">
+    <div class="page-size-selector">
+      <span class="page-size-text">{{ pageSize }} / página</span>
+      <nz-select
+        [(ngModel)]="pageSize"
+        (ngModelChange)="onPageSizeChange($event)"
+        class="page-size-select"
+        nzBorderless>
+        <nz-option [nzValue]="10" nzLabel="10"></nz-option>
+        <nz-option [nzValue]="20" nzLabel="20"></nz-option>
+        <nz-option [nzValue]="50" nzLabel="50"></nz-option>
+        <nz-option [nzValue]="100" nzLabel="100"></nz-option>
+      </nz-select>
+    </div>
+
+    <nz-pagination
+      [(nzPageIndex)]="pageIndex"
+      [nzTotal]="total"
+      [nzPageSize]="pageSize"
+      [nzShowSizeChanger]="false"
+      [nzShowQuickJumper]="false"
+      [nzItemRender]="renderItemTemplate"
+      (nzPageIndexChange)="onPageChange($event)"
+      class="pagination">
+    </nz-pagination>
+
+    <ng-template #renderItemTemplate let-type let-page="page">
+      <ng-container [ngSwitch]="type">
+        <a *ngSwitchCase="'prev'" class="pagination-prev-btn">
+          <span nz-icon nzType="left"></span>
+        </a>
+        <a *ngSwitchCase="'next'" class="pagination-next-btn">
+          <span nz-icon nzType="right"></span>
+        </a>
+        <a *ngSwitchCase="'page'" class="pagination-number">
+          {{ page }}
+        </a>
+        <span *ngSwitchDefault class="pagination-ellipsis">...</span>
+      </ng-container>
+    </ng-template>
+  </div>
+</div>

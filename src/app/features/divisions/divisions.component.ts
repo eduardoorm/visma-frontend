@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
 
@@ -7,13 +7,15 @@ import { DivisionsHeaderComponent } from '../../shared/components/divisions-head
 import { TableControlsComponent } from '../../shared/components/table-controls/table-controls.component';
 import { DivisionsTableComponent } from './components/divisions-table/divisions-table.component';
 import { TableFooterComponent } from '../../shared/components/table-footer/table-footer.component';
+import { DivisionFormModalComponent } from './components/division-form-modal/division-form-modal.component';
 
 import { DivisionService } from './services/division.service';
 import {
   DivisionResponseDto,
   DivisionFilters,
   DivisionSorting,
-  DivisionTableColumn
+  DivisionTableColumn,
+  CreateDivisionDto
 } from './models/division.interface';
 import { NavLink, UserInfo, ActionIcon, TabConfig } from '../../shared/models/component-config.interface';
 import { FilterLabels, LevelOption } from './models/table-config.interface';
@@ -27,7 +29,8 @@ import { FilterLabels, LevelOption } from './models/table-config.interface';
     DivisionsHeaderComponent,
     TableControlsComponent,
     DivisionsTableComponent,
-    TableFooterComponent
+    TableFooterComponent,
+    DivisionFormModalComponent
   ],
   template: `
     <div class="divisions-page">
@@ -91,6 +94,12 @@ import { FilterLabels, LevelOption } from './models/table-config.interface';
         (pageSizeChange)="onPageSizeChange($event)"
         (pageIndexChange)="onPageChange($event)">
       </app-table-footer>
+
+      <app-division-form-modal
+        [(visible)]="isModalVisible"
+        [parentDivisions]="allDivisions"
+        (submitForm)="onCreateDivision($event)">
+      </app-division-form-modal>
     </div>
   `,
   styles: [`
@@ -103,12 +112,18 @@ import { FilterLabels, LevelOption } from './models/table-config.interface';
 export class DivisionsComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
+  @ViewChild(DivisionFormModalComponent) modalComponent?: DivisionFormModalComponent;
+
   // Data properties
   divisions: DivisionResponseDto[] = [];
+  allDivisions: DivisionResponseDto[] = [];
   loading = false;
   total = 0;
   pageSize = 10;
   pageIndex = 1;
+
+  // Modal state
+  isModalVisible = false;
 
   // Search and filter properties
   searchValue = '';
@@ -190,6 +205,7 @@ export class DivisionsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadDivisions();
+    this.loadAllDivisions();
     this.initCheckedMap();
   }
 
@@ -231,6 +247,22 @@ export class DivisionsComponent implements OnInit, OnDestroy {
       error: (error) => {
         console.error('Error loading divisions:', error);
         this.loading = false;
+      }
+    });
+  }
+
+  /**
+   * Load all divisions for parent division selection
+   */
+  loadAllDivisions(): void {
+    this.divisionService.getAllDivisions(1, 1000).pipe(
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: (response) => {
+        this.allDivisions = response.data;
+      },
+      error: (error) => {
+        console.error('Error loading all divisions:', error);
       }
     });
   }
@@ -331,8 +363,33 @@ export class DivisionsComponent implements OnInit, OnDestroy {
    * Create new division
    */
   createDivision(): void {
-    // TODO: Open modal to create division
-    console.log('Create division');
+    this.isModalVisible = true;
+  }
+
+  /**
+   * Handle division creation from modal
+   */
+  onCreateDivision(divisionData: CreateDivisionDto): void {
+    this.divisionService.createDivision(divisionData)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (newDivision) => {
+          console.log('Division created successfully:', newDivision);
+          this.isModalVisible = false;
+          if (this.modalComponent) {
+            this.modalComponent.resetForm();
+          }
+          // Reload divisions to show the new one
+          this.loadDivisions();
+          this.loadAllDivisions();
+        },
+        error: (error) => {
+          console.error('Error creating division:', error);
+          if (this.modalComponent) {
+            this.modalComponent.isLoading = false;
+          }
+        }
+      });
   }
 
   /**

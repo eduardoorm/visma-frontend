@@ -7,15 +7,13 @@ import { DivisionsHeaderComponent } from '../../shared/components/divisions-head
 import { TableControlsComponent } from '../../shared/components/table-controls/table-controls.component';
 import { DivisionsTableComponent } from './components/divisions-table/divisions-table.component';
 import { TableFooterComponent } from '../../shared/components/table-footer/table-footer.component';
-import { DivisionFormModalComponent } from './components/division-form-modal/division-form-modal.component';
 
 import { DivisionService } from './services/division.service';
 import {
   DivisionResponseDto,
   DivisionFilters,
   DivisionSorting,
-  DivisionTableColumn,
-  CreateDivisionDto
+  DivisionTableColumn
 } from './models/division.interface';
 import { NavLink, UserInfo, ActionIcon, TabConfig } from '../../shared/models/component-config.interface';
 import { FilterLabels, LevelOption } from './models/table-config.interface';
@@ -29,8 +27,7 @@ import { FilterLabels, LevelOption } from './models/table-config.interface';
     DivisionsHeaderComponent,
     TableControlsComponent,
     DivisionsTableComponent,
-    TableFooterComponent,
-    DivisionFormModalComponent
+    TableFooterComponent
   ],
   template: `
     <div class="divisions-page">
@@ -94,12 +91,6 @@ import { FilterLabels, LevelOption } from './models/table-config.interface';
         (pageSizeChange)="onPageSizeChange($event)"
         (pageIndexChange)="onPageChange($event)">
       </app-table-footer>
-
-      <app-division-form-modal
-        [(visible)]="isModalVisible"
-        [parentDivisions]="allDivisions"
-        (submitForm)="onCreateDivision($event)">
-      </app-division-form-modal>
     </div>
   `,
   styles: [`
@@ -114,7 +105,6 @@ export class DivisionsComponent implements OnInit, OnDestroy {
 
   // Data properties
   divisions: DivisionResponseDto[] = [];
-  allDivisions: DivisionResponseDto[] = [];
   loading = false;
   total = 0;
   pageSize = 10;
@@ -133,9 +123,6 @@ export class DivisionsComponent implements OnInit, OnDestroy {
   allChecked = false;
   indeterminate = false;
   checkedMap: { [key: number]: boolean } = {};
-
-  // Modal properties
-  isModalVisible = false;
 
   // Table columns configuration
   tableColumns: DivisionTableColumn[] = [
@@ -203,7 +190,6 @@ export class DivisionsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadDivisions();
-    this.loadAllDivisions();
     this.initCheckedMap();
   }
 
@@ -247,22 +233,6 @@ export class DivisionsComponent implements OnInit, OnDestroy {
         this.loading = false;
       }
     });
-  }
-
-  /**
-   * Load all divisions for parent selection in modal
-   */
-  loadAllDivisions(): void {
-    this.divisionService.getAllDivisions(1, 1000)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (response) => {
-          this.allDivisions = response.data;
-        },
-        error: (error) => {
-          console.error('Error loading all divisions:', error);
-        }
-      });
   }
 
   /**
@@ -361,28 +331,8 @@ export class DivisionsComponent implements OnInit, OnDestroy {
    * Create new division
    */
   createDivision(): void {
-    this.isModalVisible = true;
-  }
-
-  /**
-   * Handle division creation from modal
-   */
-  onCreateDivision(divisionData: CreateDivisionDto): void {
-    this.divisionService.createDivision(divisionData)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (newDivision) => {
-          console.log('Division created successfully:', newDivision);
-          this.isModalVisible = false;
-          // Reload divisions to show the new one
-          this.loadDivisions();
-          this.loadAllDivisions();
-        },
-        error: (error) => {
-          console.error('Error creating division:', error);
-          this.isModalVisible = false;
-        }
-      });
+    // TODO: Open modal to create division
+    console.log('Create division');
   }
 
   /**

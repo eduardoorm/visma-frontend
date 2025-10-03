@@ -36,7 +36,7 @@ import { FilterLabels, LevelOption } from './models/table-config.interface';
         [actionIcons]="actionIcons"
         [userInfo]="userInfo">
       </app-navbar>
-      
+
       <app-divisions-header
         [searchValue]="searchValue"
         [tableColumns]="tableColumns"
@@ -240,7 +240,7 @@ export class DivisionsComponent implements OnInit, OnDestroy {
    */
   onSearch(value: string): void {
     this.searchValue = value;
-    this.filters.search = value || undefined;
+    this.filters.searchTerm = value || undefined;
     this.pageIndex = 1;
     this.loadDivisions();
   }

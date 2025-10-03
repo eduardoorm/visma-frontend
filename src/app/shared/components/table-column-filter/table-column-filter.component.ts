@@ -14,45 +14,11 @@ export interface FilterOption {
   value: any;
 }
 
-/**
- * Filter change event interface
- */
 export interface FilterChangeEvent {
   value: any;
   closeDropdown?: boolean;
 }
 
-/**
- * Reusable table column filter component
- * 
- * Supports two filter types:
- * - "text": A search input field for text filtering
- * - "select": A dropdown list of options to select from
- * 
- * @example
- * <!-- Text filter -->
- * <app-table-column-filter
- *   type="text"
- *   [label]="'División:'"
- *   [value]="nameSearchValue"
- *   [active]="filters.search || activeFilterColumn === 'name'"
- *   [placeholder]="'Buscar división por nombre'"
- *   (filterChange)="onNameFilterChange($event)"
- *   (reset)="clearNameFilter()">
- * </app-table-column-filter>
- * 
- * @example
- * <!-- Select filter -->
- * <app-table-column-filter
- *   type="select"
- *   [label]="'Niveles:'"
- *   [options]="levelOptions"
- *   [value]="filters.level"
- *   [active]="filters.level !== undefined"
- *   (filterChange)="onLevelFilterChange($event)"
- *   (reset)="clearLevelFilter()">
- * </app-table-column-filter>
- */
 @Component({
   selector: 'app-table-column-filter',
   standalone: true,

@@ -23,7 +23,7 @@
             <div class="header-actions">
               <span nz-icon nzType="filter"
                     class="filter-icon"
-                    [class.active]="filters.search || activeFilterColumn === 'name'"
+                    [class.active]="filters.searchTerm || activeFilterColumn === 'name'"
                     nz-dropdown
                     [nzDropdownMenu]="divisionFilterMenu"
                     nzTrigger="click"
@@ -64,16 +64,17 @@
                 </ng-template>
               </div>
               <div class="division-options" *ngIf="divisions.length">
-                <div class="division-option"
-                     *ngFor="let division of divisions | filter: nameSearchValue"
-                     (click)="onDivisionFilter(division.name)"
-                     [class.selected]="filters.search === division.name">
+       <div class="division-option"
+         *ngFor="let division of divisions | filter: nameSearchValue"
+         (click)="onDivisionFilter(division.name)"
+         [class.selected]="filters.searchTerm === division.name">
+
                   {{ division.name }}
                 </div>
               </div>
               <div class="filter-dropdown-actions">
                 <button nz-button nzSize="small" nzType="default" (click)="clearNameFilter(); divisionFilterVisible = false">{{ filterLabels.resetButton }}</button>
-                <button nz-button nzSize="small" nzType="primary" (click)="onNameSearch(); divisionFilterVisible = false">{{ filterLabels.applyButton }}</button>
+                <button nz-button nzSize="small" nzType="primary" (click)="divisionFilterVisible = false">{{ filterLabels.applyButton }}</button>
               </div>
             </div>
           </nz-dropdown-menu>

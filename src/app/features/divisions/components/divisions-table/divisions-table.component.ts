@@ -126,7 +126,7 @@ export class DivisionsTableComponent implements OnInit, OnDestroy {
    * Maneja la búsqueda específica por nombre
    */
   onNameSearch(): void {
-    const updatedFilters = { ...this.filters, search: this.nameSearchValue || undefined };
+    const updatedFilters = { ...this.filters, searchTerm: this.nameSearchValue || undefined };
     this.filterChange.emit(updatedFilters);
     this.activeFilterColumn = null;
   }
@@ -135,10 +135,8 @@ export class DivisionsTableComponent implements OnInit, OnDestroy {
    * Maneja el filtro por nombre de división seleccionada
    */
   onDivisionFilter(divisionName: string): void {
-    this.nameSearchValue = divisionName;
-    const updatedFilters = { ...this.filters, search: divisionName };
+    const updatedFilters = { ...this.filters, searchTerm: divisionName };
     this.filterChange.emit(updatedFilters);
-    this.divisionFilterVisible = false;
   }
 
   /**
@@ -163,13 +161,14 @@ export class DivisionsTableComponent implements OnInit, OnDestroy {
    */
   onParentFilter(parentId: number | null): void {
     const updatedFilters = { ...this.filters, parentId: parentId || undefined };
+    console.log(updatedFilters);
     this.filterChange.emit(updatedFilters);
   }
 
   // Limpia solo el filtro de búsqueda de división
   clearNameFilter(): void {
     this.nameSearchValue = '';
-    const updatedFilters = { ...this.filters, search: undefined };
+    const updatedFilters = { ...this.filters, searchTerm: undefined };
     this.filterChange.emit(updatedFilters);
   }
 

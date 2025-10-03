@@ -33,8 +33,8 @@ export class DivisionService {
       .set('page', page.toString())
       .set('limit', limit.toString());
 
-    if (filters?.search) {
-      params = params.set('search', filters.search);
+    if (filters?.searchTerm) {
+      params = params.set('searchTerm', filters.searchTerm);
     }
 
     if (filters?.level !== undefined) {

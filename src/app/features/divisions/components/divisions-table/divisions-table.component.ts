@@ -21,6 +21,7 @@ import {
 } from '../../models/division.interface';
 import { FilterLabels, LevelOption } from '../../models/table-config.interface';
 import { FilterPipe } from '../../pipes/filter.pipe';
+import { CreateDivisionModalComponent } from '../create-division-modal/create-division-modal.component';
 
 @Component({
   selector: 'app-divisions-table',
@@ -35,7 +36,8 @@ import { FilterPipe } from '../../pipes/filter.pipe';
     NzMenuModule,
     NzIconModule,
     NzCheckboxModule,
-    FilterPipe
+    FilterPipe,
+    CreateDivisionModalComponent
   ],
   templateUrl: './divisions-table.component.html',
   styleUrls: ['./divisions-table.component.scss']
@@ -46,6 +48,10 @@ export class DivisionsTableComponent implements OnInit, OnDestroy {
   parentSearchValue: string = '';
   divisionFilterVisible = false;
   parentFilterVisible = false;
+
+  // Modal and form properties
+  isModalVisible = false;
+  selectedParentDivision: DivisionResponseDto | null = null;
 
   @Input() divisions: DivisionResponseDto[] = [];
   @Input() loading = false;
@@ -79,6 +85,7 @@ export class DivisionsTableComponent implements OnInit, OnDestroy {
   @Output() filterChange = new EventEmitter<DivisionFilters>();
   @Output() allCheckedChange = new EventEmitter<boolean>();
   @Output() itemCheckedChange = new EventEmitter<{ id: number, checked: boolean }>();
+  @Output() subdivisionCreated = new EventEmitter<void>();
 
   // Filter properties
   nameSearchValue = '';
@@ -228,5 +235,21 @@ export class DivisionsTableComponent implements OnInit, OnDestroy {
    */
   trackByDivision(index: number, division: DivisionResponseDto): number {
     return division.id;
+  }
+
+  /**
+   * Abre el modal para crear división
+   */
+  onAddSubdivision(parentDivision: DivisionResponseDto): void {
+    this.selectedParentDivision = parentDivision;
+    this.isModalVisible = true;
+  }
+
+  /**
+   * Maneja la creación de la división desde el modal
+   */
+  onDivisionCreated(): void {
+    // Emitir evento para recargar la tabla
+    this.subdivisionCreated.emit();
   }
 }

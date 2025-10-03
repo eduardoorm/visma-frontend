@@ -77,7 +77,8 @@ import { FilterLabels, LevelOption } from './models/table-config.interface';
         (sortChange)="onSortChange($event)"
         (filterChange)="onFilterChange($event)"
         (allCheckedChange)="onAllChecked($event)"
-        (itemCheckedChange)="onItemChecked($event)">
+        (itemCheckedChange)="onItemChecked($event)"
+        (subdivisionCreated)="onSubdivisionCreated()">
       </app-divisions-table>
 
       <app-table-footer
@@ -361,5 +362,13 @@ export class DivisionsComponent implements OnInit, OnDestroy {
   importDivisions(): void {
     // TODO: Open modal to import file
     console.log('Import divisions');
+  }
+
+  /**
+   * Handle subdivision created event
+   */
+  onSubdivisionCreated(): void {
+    // Reload divisions to show the new subdivision
+    this.loadDivisions();
   }
 }

@@ -269,7 +269,7 @@
         <td class="subdivisions-cell" *ngIf="selectedColumns.includes('subdivisiones')">
           <div class="subdivisions-content">
             <span class="subdivisions-count">{{ getSubdivisionsCount(division) }}</span>
-            <button nz-button nzType="default" nzSize="small" class="add-subdivision-btn" *ngIf="division.level < 5">
+            <button nz-button nzType="default" nzSize="small" class="add-subdivision-btn" *ngIf="division.level < 5" (click)="onAddSubdivision(division)">
               <span nz-icon nzType="plus"></span>
             </button>
           </div>
@@ -283,3 +283,10 @@
     </tbody>
   </nz-table>
 </div>
+
+<!-- Modal para crear división -->
+<app-create-division-modal
+  [(visible)]="isModalVisible"
+  [parentDivision]="selectedParentDivision"
+  (divisionCreated)="onDivisionCreated()">
+</app-create-division-modal>

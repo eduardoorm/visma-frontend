@@ -86,6 +86,9 @@ export class DivisionsTableComponent implements OnInit, OnDestroy {
   @Output() allCheckedChange = new EventEmitter<boolean>();
   @Output() itemCheckedChange = new EventEmitter<{ id: number, checked: boolean }>();
   @Output() subdivisionCreated = new EventEmitter<void>();
+  @Output() editDivision = new EventEmitter<DivisionResponseDto>();
+  @Output() deleteDivision = new EventEmitter<DivisionResponseDto>();
+  @Output() viewSubdivisions = new EventEmitter<DivisionResponseDto>();
 
   // Filter properties
   nameSearchValue = '';
@@ -250,5 +253,32 @@ export class DivisionsTableComponent implements OnInit, OnDestroy {
   onDivisionCreated(): void {
     // Emitir evento para recargar la tabla
     this.subdivisionCreated.emit();
+  }
+
+  /**
+   * Maneja el clic en el botón de editar
+   */
+  onEditDivision(division: DivisionResponseDto, event: Event): void {
+    event.stopPropagation();
+    this.editDivision.emit(division);
+  }
+
+  /**
+   * Maneja el clic en el botón de eliminar
+   */
+  onDeleteDivision(division: DivisionResponseDto, event: Event): void {
+    event.stopPropagation();
+    this.deleteDivision.emit(division);
+  }
+
+  /**
+   * Maneja el clic en el contador de subdivisiones
+   */
+  onViewSubdivisions(division: DivisionResponseDto, event: Event): void {
+    event.stopPropagation();
+    const count = this.getSubdivisionsCount(division);
+    if (count > 0) {
+      this.viewSubdivisions.emit(division);
+    }
   }
 }

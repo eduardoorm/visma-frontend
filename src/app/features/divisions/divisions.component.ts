@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 import { NavbarComponent } from '../../shared/components/navbar/navbar.component';
 import { DivisionsHeaderComponent } from '../../shared/components/divisions-header/divisions-header.component';
@@ -8,6 +9,7 @@ import { TableControlsComponent } from '../../shared/components/table-controls/t
 import { DivisionsTableComponent } from './components/divisions-table/divisions-table.component';
 import { TableFooterComponent } from '../../shared/components/table-footer/table-footer.component';
 import { DivisionFormModalComponent } from './components/division-form-modal/division-form-modal.component';
+import { SubdivisionsModalComponent } from './components/subdivisions-modal/subdivisions-modal.component';
 
 import { DivisionService } from './services/division.service';
 import {
@@ -15,7 +17,8 @@ import {
   DivisionFilters,
   DivisionSorting,
   DivisionTableColumn,
-  CreateDivisionDto
+  CreateDivisionDto,
+  UpdateDivisionDto
 } from './models/division.interface';
 import { NavLink, UserInfo, ActionIcon, TabConfig } from '../../shared/models/component-config.interface';
 import { FilterLabels, LevelOption } from './models/table-config.interface';
@@ -30,7 +33,8 @@ import { FilterLabels, LevelOption } from './models/table-config.interface';
     TableControlsComponent,
     DivisionsTableComponent,
     TableFooterComponent,
-    DivisionFormModalComponent
+    DivisionFormModalComponent,
+    SubdivisionsModalComponent
   ],
   template: `
     <div class="divisions-page">
@@ -81,7 +85,10 @@ import { FilterLabels, LevelOption } from './models/table-config.interface';
         (filterChange)="onFilterChange($event)"
         (allCheckedChange)="onAllChecked($event)"
         (itemCheckedChange)="onItemChecked($event)"
-        (subdivisionCreated)="onSubdivisionCreated()">
+        (subdivisionCreated)="onSubdivisionCreated()"
+        (editDivision)="onEditDivision($event)"
+        (deleteDivision)="onDeleteDivision($event)"
+        (viewSubdivisions)="onViewSubdivisions($event)">
       </app-divisions-table>
 
       <app-table-footer
@@ -98,8 +105,15 @@ import { FilterLabels, LevelOption } from './models/table-config.interface';
       <app-division-form-modal
         [(visible)]="isModalVisible"
         [parentDivisions]="allDivisions"
-        (submitForm)="onCreateDivision($event)">
+        [editMode]="isEditMode"
+        [divisionToEdit]="divisionToEdit"
+        (submitForm)="onSubmitDivisionForm($event)">
       </app-division-form-modal>
+
+      <app-subdivisions-modal
+        [(visible)]="isSubdivisionsModalVisible"
+        [parentDivision]="selectedDivisionForSubdivisions">
+      </app-subdivisions-modal>
     </div>
   `,
   styles: [`
@@ -124,6 +138,10 @@ export class DivisionsComponent implements OnInit, OnDestroy {
 
   // Modal state
   isModalVisible = false;
+  isEditMode = false;
+  divisionToEdit: DivisionResponseDto | null = null;
+  isSubdivisionsModalVisible = false;
+  selectedDivisionForSubdivisions: DivisionResponseDto | null = null;
 
   // Search and filter properties
   searchValue = '';
@@ -201,7 +219,10 @@ export class DivisionsComponent implements OnInit, OnDestroy {
     { label: 'Nivel 5', value: 5 }
   ];
 
-  constructor(private divisionService: DivisionService) {}
+  constructor(
+    private divisionService: DivisionService,
+    private modal: NzModalService
+  ) {}
 
   ngOnInit(): void {
     this.loadDivisions();
@@ -363,33 +384,110 @@ export class DivisionsComponent implements OnInit, OnDestroy {
    * Create new division
    */
   createDivision(): void {
+    this.isEditMode = false;
+    this.divisionToEdit = null;
     this.isModalVisible = true;
   }
 
   /**
-   * Handle division creation from modal
+   * Handle edit division
    */
-  onCreateDivision(divisionData: CreateDivisionDto): void {
-    this.divisionService.createDivision(divisionData)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (newDivision) => {
-          console.log('Division created successfully:', newDivision);
-          this.isModalVisible = false;
-          if (this.modalComponent) {
-            this.modalComponent.resetForm();
+  onEditDivision(division: DivisionResponseDto): void {
+    this.isEditMode = true;
+    this.divisionToEdit = division;
+    this.isModalVisible = true;
+  }
+
+  /**
+   * Handle delete division
+   */
+  onDeleteDivision(division: DivisionResponseDto): void {
+    this.modal.confirm({
+      nzTitle: '¿Está seguro de eliminar esta división?',
+      nzContent: `Se eliminará la división "${division.name}". Esta acción no se puede deshacer.`,
+      nzOkText: 'Eliminar',
+      nzOkType: 'primary',
+      nzOkDanger: true,
+      nzCancelText: 'Cancelar',
+      nzOnOk: () => {
+        return this.divisionService.deleteDivision(division.id)
+          .pipe(takeUntil(this.destroy$))
+          .toPromise()
+          .then(() => {
+            console.log('Division deleted successfully');
+            this.loadDivisions();
+            this.loadAllDivisions();
+          })
+          .catch((error) => {
+            console.error('Error deleting division:', error);
+          });
+      }
+    });
+  }
+
+  /**
+   * Handle view subdivisions
+   */
+  onViewSubdivisions(division: DivisionResponseDto): void {
+    this.selectedDivisionForSubdivisions = division;
+    this.isSubdivisionsModalVisible = true;
+  }
+
+  /**
+   * Handle division form submission (create or edit)
+   */
+  onSubmitDivisionForm(divisionData: CreateDivisionDto): void {
+    if (this.isEditMode && this.divisionToEdit) {
+      // Update existing division
+      const updateData: UpdateDivisionDto = {
+        name: divisionData.name,
+        parentId: divisionData.parentId,
+        level: divisionData.level,
+        collaborators: divisionData.collaborators,
+        ambassadorName: divisionData.ambassadorName
+      };
+
+      this.divisionService.updateDivision(this.divisionToEdit.id, updateData)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (updatedDivision) => {
+            console.log('Division updated successfully:', updatedDivision);
+            this.isModalVisible = false;
+            if (this.modalComponent) {
+              this.modalComponent.resetForm();
+            }
+            this.loadDivisions();
+            this.loadAllDivisions();
+          },
+          error: (error) => {
+            console.error('Error updating division:', error);
+            if (this.modalComponent) {
+              this.modalComponent.isLoading = false;
+            }
           }
-          // Reload divisions to show the new one
-          this.loadDivisions();
-          this.loadAllDivisions();
-        },
-        error: (error) => {
-          console.error('Error creating division:', error);
-          if (this.modalComponent) {
-            this.modalComponent.isLoading = false;
+        });
+    } else {
+      // Create new division
+      this.divisionService.createDivision(divisionData)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (newDivision) => {
+            console.log('Division created successfully:', newDivision);
+            this.isModalVisible = false;
+            if (this.modalComponent) {
+              this.modalComponent.resetForm();
+            }
+            this.loadDivisions();
+            this.loadAllDivisions();
+          },
+          error: (error) => {
+            console.error('Error creating division:', error);
+            if (this.modalComponent) {
+              this.modalComponent.isLoading = false;
+            }
           }
-        }
-      });
+        });
+    }
   }
 
   /**

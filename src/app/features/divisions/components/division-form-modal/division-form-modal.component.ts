@@ -28,6 +28,8 @@ import { CreateDivisionDto, DivisionResponseDto } from '../../models/division.in
 export class DivisionFormModalComponent implements OnInit, OnChanges {
   @Input() visible = false;
   @Input() parentDivisions: DivisionResponseDto[] = [];
+  @Input() editMode = false;
+  @Input() divisionToEdit: DivisionResponseDto | null = null;
   @Output() visibleChange = new EventEmitter<boolean>();
   @Output() submitForm = new EventEmitter<CreateDivisionDto>();
 
@@ -53,6 +55,17 @@ export class DivisionFormModalComponent implements OnInit, OnChanges {
       // Reset loading state when modal closes
       this.isLoading = false;
     }
+    
+    if (changes['divisionToEdit'] && this.divisionToEdit && this.editMode) {
+      // Populate form with division data
+      this.divisionForm.patchValue({
+        name: this.divisionToEdit.name,
+        parentId: this.divisionToEdit.parentId || null,
+        level: this.divisionToEdit.level,
+        collaborators: this.divisionToEdit.collaborators,
+        ambassadorName: this.divisionToEdit.ambassadorName || ''
+      });
+    }
   }
 
   initForm(): void {
@@ -68,7 +81,7 @@ export class DivisionFormModalComponent implements OnInit, OnChanges {
   handleCancel(): void {
     this.visible = false;
     this.visibleChange.emit(false);
-    this.divisionForm.reset();
+    this.resetForm();
   }
 
   handleOk(): void {

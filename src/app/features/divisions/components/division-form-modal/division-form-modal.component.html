@@ -1,6 +1,6 @@
 <nz-modal
   [(nzVisible)]="visible"
-  nzTitle="Crear nueva división"
+  [nzTitle]="editMode ? 'Editar división' : 'Crear nueva división'"
   [nzFooter]="modalFooter"
   (nzOnCancel)="handleCancel()"
   nzWidth="600px">
@@ -93,7 +93,7 @@
       (click)="handleOk()"
       [nzLoading]="isLoading"
       [disabled]="!divisionForm.valid">
-      Crear división
+      {{ editMode ? 'Guardar cambios' : 'Crear división' }}
     </button>
   </ng-template>
 

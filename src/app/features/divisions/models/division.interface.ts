@@ -9,6 +9,7 @@ export interface Division {
   ambassadorName?: string;
   createdAt: Date;
   updatedAt: Date;
+  
 }
 
 export interface CreateDivisionDto {

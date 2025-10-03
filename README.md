@@ -1,59 +1,94 @@
-# VismaFrontend
+# Visma Frontend - División Management System
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.17.
+Sistema de gestión de divisiones organizacionales con visualización jerárquica y CRUD completo.
 
-## Development server
+## 🚀 Tecnologías
 
-To start a local development server, run:
+- **Angular 18+** - Framework principal con arquitectura standalone
+- **NgZorro (Ant Design)** - Biblioteca de componentes UI
+- **SCSS** - Estilos con arquitectura modular
+- **TypeScript** - Tipado estático
 
-```bash
-ng serve
+## 📋 Funcionalidades
+
+- ✅ Listado de divisiones con paginación y filtros
+- ✅ CRUD completo de divisiones
+- ✅ Modal para crear/editar divisiones
+- ✅ Modal para visualizar subdivisiones
+- ✅ Integración con backend NestJS
+
+## 🏗️ Arquitectura
+
+```
+src/app/features/divisions/
+├── components/          # Componentes UI (tabla, modals, footer)
+├── services/           # Servicios de datos y lógica
+├── models/             # Interfaces y tipos TypeScript
+└── divisions.routes.ts # Configuración de rutas lazy-loaded
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## 🛠️ Instalación y Ejecución
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### Desarrollo Local
 
 ```bash
-ng generate component component-name
+# Instalar dependencias
+npm install
+
+# Ejecutar en modo desarrollo
+npm start
+# Aplicación disponible en http://localhost:4200
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### Docker
 
 ```bash
-ng generate --help
+# Construir y levantar contenedor
+docker-compose up --build
+
+# Aplicación disponible en http://localhost
 ```
 
-## Building
+## 🌐 Backend
 
-To build the project run:
+Backend NestJS desplegado en Google Cloud Run:
+- **API URL**: `https://visma-backend-lzqunom2jq-uc.a.run.app/api`
+- **Base de datos**: MySQL
+- **Endpoints**: CRUD divisiones + subdivisiones
+
+## 🚢 Despliegue
+
+### Firebase Hosting
 
 ```bash
-ng build
+# Build de producción
+npm run build
+
+# Deploy a Firebase
+firebase deploy
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+**URL Producción**: [visma-frontend.web.app](https://visma-frontend.web.app)
 
-## Running unit tests
+### CI/CD
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+GitHub Actions configurado para deploy automático:
+- Merge a `main` → Deploy a producción
+- Merge a `develop` → Deploy a staging
+
+## 📦 Scripts Disponibles
 
 ```bash
-ng test
+npm start          # Servidor de desarrollo
+npm run build      # Build de producción
+npm test          # Tests unitarios
+npm run lint      # Linter
 ```
 
-## Running end-to-end tests
+## 👤 Autor
 
-For end-to-end (e2e) testing, run:
+Eduardo Ormeño - [eduardoorm](https://github.com/eduardoorm)
 
-```bash
-ng e2e
-```
+## 📄 Licencia
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Este proyecto fue desarrollado como prueba técnica para Visma.

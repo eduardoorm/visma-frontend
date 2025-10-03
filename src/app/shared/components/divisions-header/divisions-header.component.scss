@@ -3,11 +3,26 @@
   padding: 11px 32px;
   box-shadow: 1px 0px 4px 0px rgba(0, 0, 0, 0.15);
 
+  @media (max-width: 992px) {
+    padding: 11px 20px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 11px 16px;
+  }
+
   .header-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
     height: 42px;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      height: auto;
+      gap: 12px;
+      align-items: flex-start;
+    }
   }
 
   .header-left {
@@ -15,11 +30,19 @@
     flex-direction: column;
     gap: 4px;
 
+    @media (max-width: 768px) {
+      width: 100%;
+    }
+
     .breadcrumb {
       .breadcrumb-item {
         color: #555155;
         font-size: 14px;
         font-weight: 600;
+
+        @media (max-width: 768px) {
+          font-size: 13px;
+        }
 
         &.active {
           color: #555155;
@@ -34,10 +57,23 @@
     gap: 8px;
     height: 34px;
 
+    @media (max-width: 768px) {
+      width: 100%;
+      height: auto;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
     .columns-search-group {
       display: flex;
       gap: 8px;
       align-items: center;
+
+      @media (max-width: 768px) {
+        width: 100%;
+        order: 2;
+        margin-top: 8px;
+      }
     }
 
     .columns-btn {
@@ -49,6 +85,10 @@
       font-size: 13px;
       min-width: 140px;
 
+      @media (max-width: 768px) {
+        display: none; // Hide columns button on mobile to save space
+      }
+
       .dropdown-icon {
         color: #AFA9AF;
         margin-left: 8px;
@@ -58,10 +98,22 @@
     .search-input {
       width: 280px;
 
+      @media (max-width: 992px) {
+        width: 220px;
+      }
+
+      @media (max-width: 768px) {
+        width: 100%;
+      }
+
       ::ng-deep .ant-input-wrapper {
         display: flex;
         align-items: center;
         height: 32px;
+
+        @media (max-width: 768px) {
+          height: 40px; // Larger touch target
+        }
       }
 
       ::ng-deep .ant-input-group {
@@ -76,6 +128,10 @@
         border-radius: 4px;
         background-color: white;
 
+        @media (max-width: 768px) {
+          height: 40px; // Larger touch target
+        }
+
         &:hover, &:focus, &-focused {
           border-color: #2E52F8;
           box-shadow: 0 0 0 2px rgba(46, 82, 248, 0.2);
@@ -88,9 +144,18 @@
         box-shadow: none;
         padding: 0;
 
+        @media (max-width: 768px) {
+          height: 28px;
+          font-size: 14px;
+        }
+
         &::placeholder {
           color: #bfbfbf;
           font-size: 13px;
+
+          @media (max-width: 768px) {
+            font-size: 14px;
+          }
         }
 
         &:hover, &:focus {
@@ -106,6 +171,10 @@
         align-items: center;
         font-size: 14px;
 
+        @media (max-width: 768px) {
+          font-size: 16px;
+        }
+
         &:hover {
           color: #2E52F8;
         }
@@ -120,6 +189,13 @@
       align-items: center;
       justify-content: center;
       box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.15);
+      min-width: 44px; // Touch target for mobile
+      min-height: 44px;
+
+      @media (max-width: 768px) {
+        width: 44px;
+        height: 44px;
+      }
 
       &.import-btn, &.export-btn {
         background: white;
@@ -128,6 +204,10 @@
         .btn-icon {
           color: #1890FF;
           font-size: 16px;
+
+          @media (max-width: 768px) {
+            font-size: 18px;
+          }
         }
       }
 
@@ -141,6 +221,10 @@
           font-size: 24px;
           font-weight: 400;
           line-height: 1;
+
+          @media (max-width: 768px) {
+            font-size: 28px;
+          }
         }
       }
     }

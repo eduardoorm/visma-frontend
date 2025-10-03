@@ -1,0 +1,75 @@
+// Filter dropdown panel styles
+.filter-dropdown-panel {
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  padding: 12px;
+  min-width: 250px;
+  max-width: 300px;
+
+  .filter-option-title {
+    font-weight: 600;
+    font-size: 13px;
+    color: #333;
+    margin-bottom: 12px;
+  }
+
+  .filter-search-specific {
+    margin-bottom: 15px;
+
+    .search-input {
+      width: 100%;
+
+      input {
+        font-size: 13px;
+      }
+    }
+
+    .search-icon {
+      cursor: pointer;
+      color: #bfbfbf;
+
+      &:hover {
+        color: #1890ff;
+      }
+    }
+  }
+
+  .filter-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 200px;
+    overflow-y: auto;
+    margin-bottom: 15px;
+
+    .filter-option {
+      padding: 6px 10px;
+      font-size: 13px;
+      cursor: pointer;
+      border-radius: 2px;
+      transition: all 0.2s;
+
+      &:hover {
+        background-color: #f5f5f5;
+      }
+
+      &.selected {
+        background-color: #e6f7ff;
+        color: #1890ff;
+      }
+    }
+  }
+
+  .filter-dropdown-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding-top: 12px;
+    border-top: 1px solid #f0f0f0;
+
+    button {
+      font-size: 13px;
+    }
+  }
+}

@@ -1,0 +1,39 @@
+<nz-modal
+  [(nzVisible)]="visible"
+  [nzTitle]="'Subdivisiones de ' + (parentDivision?.name || '')"
+  [nzFooter]="null"
+  (nzOnCancel)="handleClose()"
+  nzWidth="800px">
+  
+  <ng-container *nzModalContent>
+    <nz-table
+      #subdivisionsTable
+      [nzData]="subdivisions"
+      [nzLoading]="loading"
+      [nzShowPagination]="false"
+      nzSize="small">
+      
+      <thead>
+        <tr>
+          <th>División</th>
+          <th>Nivel</th>
+          <th>Colaboradores</th>
+          <th>Embajador</th>
+        </tr>
+      </thead>
+      
+      <tbody>
+        <tr *ngFor="let subdivision of subdivisions">
+          <td>{{ subdivision.name }}</td>
+          <td>{{ subdivision.level }}</td>
+          <td>{{ subdivision.collaborators }}</td>
+          <td>{{ subdivision.ambassadorName || '-' }}</td>
+        </tr>
+      </tbody>
+    </nz-table>
+
+    <div *ngIf="!loading && subdivisions.length === 0" class="empty-state">
+      <p>No hay subdivisiones disponibles</p>
+    </div>
+  </ng-container>
+</nz-modal>

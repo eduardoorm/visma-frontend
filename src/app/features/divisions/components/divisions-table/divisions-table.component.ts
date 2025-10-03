@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 
 // NgZorro imports
@@ -11,13 +11,18 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 import { DivisionService } from '../../services/division.service';
 import {
   DivisionResponseDto,
   DivisionFilters,
   DivisionSorting,
-  DivisionTableColumn
+  DivisionTableColumn,
+  CreateDivisionDto
 } from '../../models/division.interface';
 import { FilterLabels, LevelOption } from '../../models/table-config.interface';
 import { FilterPipe } from '../../pipes/filter.pipe';
@@ -28,6 +33,7 @@ import { FilterPipe } from '../../pipes/filter.pipe';
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     NzTableModule,
     NzButtonModule,
     NzInputModule,
@@ -35,6 +41,9 @@ import { FilterPipe } from '../../pipes/filter.pipe';
     NzMenuModule,
     NzIconModule,
     NzCheckboxModule,
+    NzModalModule,
+    NzFormModule,
+    NzInputNumberModule,
     FilterPipe
   ],
   templateUrl: './divisions-table.component.html',
@@ -46,6 +55,12 @@ export class DivisionsTableComponent implements OnInit, OnDestroy {
   parentSearchValue: string = '';
   divisionFilterVisible = false;
   parentFilterVisible = false;
+
+  // Modal and form properties
+  isModalVisible = false;
+  isCreating = false;
+  subdivisionForm!: FormGroup;
+  selectedParentDivision: DivisionResponseDto | null = null;
 
   @Input() divisions: DivisionResponseDto[] = [];
   @Input() loading = false;
@@ -79,6 +94,7 @@ export class DivisionsTableComponent implements OnInit, OnDestroy {
   @Output() filterChange = new EventEmitter<DivisionFilters>();
   @Output() allCheckedChange = new EventEmitter<boolean>();
   @Output() itemCheckedChange = new EventEmitter<{ id: number, checked: boolean }>();
+  @Output() subdivisionCreated = new EventEmitter<void>();
 
   // Filter properties
   nameSearchValue = '';
@@ -87,8 +103,12 @@ export class DivisionsTableComponent implements OnInit, OnDestroy {
   parentDivisions: DivisionResponseDto[] = [];
 
   constructor(
-    private divisionService: DivisionService
-  ) {}
+    private divisionService: DivisionService,
+    private fb: FormBuilder,
+    private message: NzMessageService
+  ) {
+    this.initForm();
+  }
 
   ngOnInit(): void {
     this.loadParentDivisions();
@@ -97,6 +117,19 @@ export class DivisionsTableComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  /**
+   * Inicializa el formulario de subdivisión
+   */
+  initForm(): void {
+    this.subdivisionForm = this.fb.group({
+      parentName: [{ value: '', disabled: true }],
+      name: ['', [Validators.required, Validators.maxLength(100)]],
+      collaborators: [1, [Validators.required, Validators.min(1), Validators.max(10000)]],
+      level: [{ value: 1, disabled: true }],
+      ambassadorName: ['', [Validators.maxLength(100)]]
+    });
   }
 
   /**
@@ -228,5 +261,76 @@ export class DivisionsTableComponent implements OnInit, OnDestroy {
    */
   trackByDivision(index: number, division: DivisionResponseDto): number {
     return division.id;
+  }
+
+  /**
+   * Abre el modal para crear subdivisión
+   */
+  onAddSubdivision(parentDivision: DivisionResponseDto): void {
+    this.selectedParentDivision = parentDivision;
+    const newLevel = parentDivision.level + 1;
+    
+    // Validar que no exceda nivel 5
+    if (newLevel > 5) {
+      this.message.warning('No se pueden crear subdivisiones en nivel 5');
+      return;
+    }
+
+    // Resetear y configurar el formulario
+    this.subdivisionForm.patchValue({
+      parentName: parentDivision.name,
+      name: '',
+      collaborators: 1,
+      level: newLevel,
+      ambassadorName: ''
+    });
+
+    this.isModalVisible = true;
+  }
+
+  /**
+   * Maneja el cierre del modal
+   */
+  handleCancel(): void {
+    this.isModalVisible = false;
+    this.subdivisionForm.reset();
+    this.selectedParentDivision = null;
+  }
+
+  /**
+   * Maneja la creación de la subdivisión
+   */
+  handleOk(): void {
+    if (this.subdivisionForm.valid && this.selectedParentDivision) {
+      this.isCreating = true;
+
+      const newDivision: CreateDivisionDto = {
+        name: this.subdivisionForm.value.name,
+        parentId: this.selectedParentDivision.id,
+        collaborators: this.subdivisionForm.value.collaborators,
+        level: this.subdivisionForm.get('level')?.value || (this.selectedParentDivision.level + 1),
+        ambassadorName: this.subdivisionForm.value.ambassadorName || undefined
+      };
+
+      this.divisionService.createDivision(newDivision)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (response) => {
+            this.message.success('Subdivisión creada exitosamente');
+            this.isModalVisible = false;
+            this.isCreating = false;
+            this.subdivisionForm.reset();
+            this.selectedParentDivision = null;
+            
+            // Emitir evento para recargar la tabla
+            this.subdivisionCreated.emit();
+          },
+          error: (error) => {
+            console.error('Error creating subdivision:', error);
+            this.message.error('Error al crear la subdivisión. Por favor, intente nuevamente.');
+            this.isCreating = false;
+          }
+        });
+    }
   }
 }

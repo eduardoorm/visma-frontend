@@ -313,7 +313,6 @@ export class DivisionsComponent implements OnInit, OnDestroy {
           .pipe(takeUntil(this.destroy$))
           .toPromise()
           .then(() => {
-            console.log('Division deleted successfully');
             this.loadDivisions();
             this.loadAllDivisions();
           })
@@ -360,7 +359,6 @@ export class DivisionsComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (newDivision) => {
-            console.log('Division created successfully:', newDivision);
             this.isModalVisible = false;
             if (this.modalComponent) {
               this.modalComponent.resetForm();

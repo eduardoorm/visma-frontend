@@ -147,7 +147,6 @@ export class DivisionsTableComponent implements OnInit, OnDestroy, OnChanges {
   }
   onParentFilter(parentId: number | null): void {
     const updatedFilters = { ...this.filters, parentId: parentId || undefined };
-    console.log(updatedFilters);
     this.filterChange.emit(updatedFilters);
   }
   clearNameFilter(): void {

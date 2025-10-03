@@ -1,7 +1,3 @@
-/**
- * Configuration interfaces for DivisionsTable component
- */
-
 export interface TableColumnLabels {
   [key: string]: string;
 }

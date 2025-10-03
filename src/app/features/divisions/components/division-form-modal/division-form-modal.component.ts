@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NzModalModule } from 'ng-zorro-antd/modal';
@@ -25,7 +25,7 @@ import { CreateDivisionDto, DivisionResponseDto } from '../../models/division.in
   templateUrl: './division-form-modal.component.html',
   styleUrls: ['./division-form-modal.component.scss']
 })
-export class DivisionFormModalComponent implements OnInit {
+export class DivisionFormModalComponent implements OnInit, OnChanges {
   @Input() visible = false;
   @Input() parentDivisions: DivisionResponseDto[] = [];
   @Output() visibleChange = new EventEmitter<boolean>();
@@ -46,6 +46,13 @@ export class DivisionFormModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['visible'] && !changes['visible'].currentValue) {
+      // Reset loading state when modal closes
+      this.isLoading = false;
+    }
   }
 
   initForm(): void {

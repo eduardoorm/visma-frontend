@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
 
@@ -111,6 +111,8 @@ import { FilterLabels, LevelOption } from './models/table-config.interface';
 })
 export class DivisionsComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
+
+  @ViewChild(DivisionFormModalComponent) modalComponent?: DivisionFormModalComponent;
 
   // Data properties
   divisions: DivisionResponseDto[] = [];
@@ -374,13 +376,18 @@ export class DivisionsComponent implements OnInit, OnDestroy {
         next: (newDivision) => {
           console.log('Division created successfully:', newDivision);
           this.isModalVisible = false;
+          if (this.modalComponent) {
+            this.modalComponent.resetForm();
+          }
           // Reload divisions to show the new one
           this.loadDivisions();
           this.loadAllDivisions();
         },
         error: (error) => {
           console.error('Error creating division:', error);
-          this.isModalVisible = false;
+          if (this.modalComponent) {
+            this.modalComponent.isLoading = false;
+          }
         }
       });
   }

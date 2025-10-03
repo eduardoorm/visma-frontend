@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "y",
+    "public": "dist/visma-frontend/browser",
     "ignore": [
       "firebase.json",
       "**/.*",

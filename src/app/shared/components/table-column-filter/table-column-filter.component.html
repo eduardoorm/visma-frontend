@@ -1,0 +1,47 @@
+<nz-dropdown-menu #filterMenu="nzDropdownMenu">
+  <div class="filter-dropdown-panel">
+    <div class="filter-option-title">{{ label }}</div>
+    
+    <!-- Text filter type -->
+    <div *ngIf="type === 'text'" class="filter-search-specific">
+      <nz-input-group [nzSuffix]="searchSuffix" class="search-input">
+        <input
+          type="text"
+          nz-input
+          [placeholder]="placeholder"
+          [(ngModel)]="internalValue"
+          [attr.aria-label]="placeholder"
+          (keyup.enter)="onSearch()" />
+      </nz-input-group>
+      <ng-template #searchSuffix>
+        <span nz-icon nzType="search" class="search-icon" (click)="onSearch()" [attr.aria-label]="'Buscar'"></span>
+      </ng-template>
+    </div>
+
+    <!-- Select filter type with custom template -->
+    <div *ngIf="type === 'select' && customOptionsTemplate" class="filter-options">
+      <ng-container *ngTemplateOutlet="customOptionsTemplate"></ng-container>
+    </div>
+
+    <!-- Select filter type with default options -->
+    <div *ngIf="type === 'select' && !customOptionsTemplate" class="filter-options">
+      <div 
+        class="filter-option"
+        *ngFor="let option of options"
+        (click)="onOptionSelect(option.value)"
+        [class.selected]="value === option.value">
+        {{ option.label }}
+      </div>
+    </div>
+
+    <!-- Action buttons -->
+    <div class="filter-dropdown-actions">
+      <button nz-button nzSize="small" nzType="default" (click)="onReset()">
+        {{ resetButtonLabel }}
+      </button>
+      <button nz-button nzSize="small" nzType="primary" (click)="onApply()">
+        {{ applyButtonLabel }}
+      </button>
+    </div>
+  </div>
+</nz-dropdown-menu>

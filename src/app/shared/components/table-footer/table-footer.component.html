@@ -1,21 +1,23 @@
 <!-- Footer with Pagination -->
 <div class="table-footer">
   <div class="footer-left">
-    <span class="total-count">Total colaboradores: {{ total }}</span>
+    <span class="total-count">{{ totalLabel }} {{ total }}</span>
   </div>
 
   <div class="footer-right">
     <div class="page-size-selector">
-      <span class="page-size-text">{{ pageSize }} / página</span>
+      <span class="page-size-text">{{ pageSize }} {{ pageSizeLabel }}</span>
       <nz-select
         [(ngModel)]="pageSize"
         (ngModelChange)="onPageSizeChange($event)"
         class="page-size-select"
-        nzBorderless>
-        <nz-option [nzValue]="10" nzLabel="10"></nz-option>
-        <nz-option [nzValue]="20" nzLabel="20"></nz-option>
-        <nz-option [nzValue]="50" nzLabel="50"></nz-option>
-        <nz-option [nzValue]="100" nzLabel="100"></nz-option>
+        nzBorderless
+        [attr.aria-label]="'Seleccionar tamaño de página'">
+        <nz-option 
+          *ngFor="let option of pageSizeOptions" 
+          [nzValue]="option" 
+          [nzLabel]="option.toString()">
+        </nz-option>
       </nz-select>
     </div>
 
@@ -32,13 +34,13 @@
 
     <ng-template #renderItemTemplate let-type let-page="page">
       <ng-container [ngSwitch]="type">
-        <a *ngSwitchCase="'prev'" class="pagination-prev-btn">
+        <a *ngSwitchCase="'prev'" class="pagination-prev-btn" aria-label="Página anterior">
           <span nz-icon nzType="left"></span>
         </a>
-        <a *ngSwitchCase="'next'" class="pagination-next-btn">
+        <a *ngSwitchCase="'next'" class="pagination-next-btn" aria-label="Página siguiente">
           <span nz-icon nzType="right"></span>
         </a>
-        <a *ngSwitchCase="'page'" class="pagination-number">
+        <a *ngSwitchCase="'page'" class="pagination-number" [attr.aria-label]="'Ir a página ' + page">
           {{ page }}
         </a>
         <span *ngSwitchDefault class="pagination-ellipsis">...</span>

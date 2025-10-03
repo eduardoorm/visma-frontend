@@ -22,6 +22,9 @@ export class TableFooterComponent {
   @Input() total = 0;
   @Input() pageSize = 10;
   @Input() pageIndex = 1;
+  @Input() totalLabel = 'Total colaboradores:';
+  @Input() pageSizeLabel = '/ página';
+  @Input() pageSizeOptions: number[] = [10, 20, 50, 100];
 
   @Output() pageSizeChange = new EventEmitter<number>();
   @Output() pageIndexChange = new EventEmitter<number>();

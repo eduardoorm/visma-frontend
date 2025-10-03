@@ -1,0 +1,90 @@
+<!-- Modal para crear división -->
+<nz-modal
+  [(nzVisible)]="visible"
+  nzTitle="Crear División"
+  [nzOkText]="'Crear'"
+  [nzCancelText]="'Cancelar'"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  (nzVisibleChange)="onVisibleChange($event)"
+  [nzOkLoading]="isCreating"
+  [nzOkDisabled]="!divisionForm.valid">
+  
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="divisionForm" nzLayout="vertical">
+      
+      <!-- División Superior (readonly) -->
+      <nz-form-item>
+        <nz-form-label nzRequired>División Superior</nz-form-label>
+        <nz-form-control>
+          <input nz-input formControlName="parentName" readonly />
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- Nombre -->
+      <nz-form-item>
+        <nz-form-label nzRequired>Nombre</nz-form-label>
+        <nz-form-control [nzErrorTip]="nameErrorTpl">
+          <input nz-input formControlName="name" placeholder="Ingrese el nombre de la división" maxlength="100" />
+          <ng-template #nameErrorTpl let-control>
+            <ng-container *ngIf="control.hasError('required')">
+              El nombre es obligatorio
+            </ng-container>
+            <ng-container *ngIf="control.hasError('maxlength')">
+              El nombre no puede exceder 100 caracteres
+            </ng-container>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- Colaboradores -->
+      <nz-form-item>
+        <nz-form-label nzRequired>Colaboradores</nz-form-label>
+        <nz-form-control [nzErrorTip]="collaboratorsErrorTpl">
+          <nz-input-number 
+            formControlName="collaborators" 
+            [nzMin]="1" 
+            [nzMax]="10000"
+            [nzStep]="1"
+            [nzPrecision]="0"
+            placeholder="Número de colaboradores"
+            style="width: 100%;">
+          </nz-input-number>
+          <ng-template #collaboratorsErrorTpl let-control>
+            <ng-container *ngIf="control.hasError('required')">
+              El número de colaboradores es obligatorio
+            </ng-container>
+            <ng-container *ngIf="control.hasError('min')">
+              Debe ser al menos 1
+            </ng-container>
+            <ng-container *ngIf="control.hasError('max')">
+              No puede exceder 10000
+            </ng-container>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- Nivel (readonly, calculado automáticamente) -->
+      <nz-form-item>
+        <nz-form-label nzRequired>Nivel</nz-form-label>
+        <nz-form-control>
+          <input nz-input formControlName="level" readonly />
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- Embajador -->
+      <nz-form-item>
+        <nz-form-label>Embajador</nz-form-label>
+        <nz-form-control [nzErrorTip]="ambassadorErrorTpl">
+          <input nz-input formControlName="ambassadorName" placeholder="Nombre del embajador (opcional)" maxlength="100" />
+          <ng-template #ambassadorErrorTpl let-control>
+            <ng-container *ngIf="control.hasError('maxlength')">
+              El nombre no puede exceder 100 caracteres
+            </ng-container>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+    </form>
+  </ng-container>
+</nz-modal>

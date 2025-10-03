@@ -52,7 +52,7 @@ export interface DivisionListResponse {
 }
 
 export interface DivisionFilters {
-  search?: string;
+  searchTerm?: string;
   level?: number;
   parentId?: number;
   collaboratorsMin?: number;

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
@@ -42,7 +42,7 @@ import { CreateDivisionModalComponent } from '../create-division-modal/create-di
   templateUrl: './divisions-table.component.html',
   styleUrls: ['./divisions-table.component.scss']
 })
-export class DivisionsTableComponent implements OnInit, OnDestroy {
+export class DivisionsTableComponent implements OnInit, OnDestroy, OnChanges {
   private destroy$ = new Subject<void>();
 
   parentSearchValue: string = '';
@@ -52,6 +52,9 @@ export class DivisionsTableComponent implements OnInit, OnDestroy {
   // Modal and form properties
   isModalVisible = false;
   selectedParentDivision: DivisionResponseDto | null = null;
+
+  // Caché para conteo de subdivisiones
+  subdivisionsCountCache: Map<number, number> = new Map();
 
   @Input() divisions: DivisionResponseDto[] = [];
   @Input() loading = false;
@@ -102,11 +105,38 @@ export class DivisionsTableComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadParentDivisions();
+    this.loadSubdivisionsCounts();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    // Recargar conteo cuando cambien las divisiones
+    if (changes['divisions'] && !changes['divisions'].firstChange) {
+      this.loadSubdivisionsCounts();
+    }
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  /**
+   * Carga el conteo de subdivisiones para todas las divisiones
+   */
+  loadSubdivisionsCounts(): void {
+    this.divisions.forEach(division => {
+      this.divisionService.getSubdivisions(division.id)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (subdivisions) => {
+            this.subdivisionsCountCache.set(division.id, subdivisions.length);
+          },
+          error: (error) => {
+            console.error(`Error loading subdivisions count for division ${division.id}:`, error);
+            this.subdivisionsCountCache.set(division.id, 0);
+          }
+        });
+    });
   }
 
   /**
@@ -215,12 +245,21 @@ export class DivisionsTableComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Cuenta las subdivisiones
+   * Cuenta las subdivisiones desde el caché
    */
   getSubdivisionsCount(division: DivisionResponseDto): number {
+    // Intentar obtener del caché primero
+    const cachedCount = this.subdivisionsCountCache.get(division.id);
+    if (cachedCount !== undefined) {
+      return cachedCount;
+    }
+
+    // Si no está en caché, usar el valor de subdivision si existe
     if (division.subdivisions?.length) {
       return division.subdivisions.length;
     }
+
+    // Como último recurso, contar en las divisiones locales
     return this.divisions.filter(d => d.parentId === division.id).length;
   }
 
@@ -251,6 +290,20 @@ export class DivisionsTableComponent implements OnInit, OnDestroy {
    * Maneja la creación de la división desde el modal
    */
   onDivisionCreated(): void {
+    // Actualizar el caché de subdivisiones para la división padre
+    if (this.selectedParentDivision) {
+      this.divisionService.getSubdivisions(this.selectedParentDivision.id)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (subdivisions) => {
+            this.subdivisionsCountCache.set(this.selectedParentDivision!.id, subdivisions.length);
+          },
+          error: (error) => {
+            console.error('Error updating subdivisions count:', error);
+          }
+        });
+    }
+
     // Emitir evento para recargar la tabla
     this.subdivisionCreated.emit();
   }

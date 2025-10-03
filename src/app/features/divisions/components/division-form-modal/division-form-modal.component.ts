@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NzModalModule } from 'ng-zorro-antd/modal';
@@ -25,7 +25,7 @@ import { CreateDivisionDto, DivisionResponseDto } from '../../models/division.in
   templateUrl: './division-form-modal.component.html',
   styleUrls: ['./division-form-modal.component.scss']
 })
-export class DivisionFormModalComponent implements OnInit {
+export class DivisionFormModalComponent implements OnInit, OnChanges {
   @Input() visible = false;
   @Input() parentDivisions: DivisionResponseDto[] = [];
   @Output() visibleChange = new EventEmitter<boolean>();
@@ -48,6 +48,13 @@ export class DivisionFormModalComponent implements OnInit {
     this.initForm();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    // When modal is closed from parent, reset the form
+    if (changes['visible'] && !changes['visible'].currentValue && changes['visible'].previousValue) {
+      this.resetForm();
+    }
+  }
+
   initForm(): void {
     this.divisionForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
@@ -61,7 +68,7 @@ export class DivisionFormModalComponent implements OnInit {
   handleCancel(): void {
     this.visible = false;
     this.visibleChange.emit(false);
-    this.divisionForm.reset();
+    this.resetForm();
   }
 
   handleOk(): void {

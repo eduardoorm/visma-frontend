@@ -233,6 +233,13 @@
             <span class="header-title">{{ getColumnLabel('embajadores') }}</span>
           </div>
         </th>
+
+        <!-- Acciones Column -->
+        <th class="actions-col">
+          <div class="header-cell">
+            <span class="header-title">Acciones</span>
+          </div>
+        </th>
       </tr>
     </thead>
 
@@ -269,7 +276,13 @@
         <!-- Subdivisiones -->
         <td class="subdivisions-cell" *ngIf="selectedColumns.includes('subdivisiones')">
           <div class="subdivisions-content">
-            <span class="subdivisions-count">{{ getSubdivisionsCount(division) }}</span>
+            <span 
+              class="subdivisions-count" 
+              [class.clickable]="getSubdivisionsCount(division) > 0"
+              [class.disabled]="getSubdivisionsCount(division) === 0"
+              (click)="onViewSubdivisions(division, $event)">
+              {{ getSubdivisionsCount(division) }}
+            </span>
             <button nz-button nzType="default" nzSize="small" class="add-subdivision-btn" *ngIf="division.level < 5" (click)="onAddSubdivision(division)">
               <span nz-icon nzType="plus"></span>
             </button>
@@ -279,6 +292,31 @@
         <!-- Embajadores -->
         <td class="ambassadors-cell" *ngIf="selectedColumns.includes('embajadores')">
           <span class="ambassador-name">{{ division.ambassadorName || '-' }}</span>
+        </td>
+
+        <!-- Acciones -->
+        <td class="actions-cell">
+          <div class="actions-content">
+            <button 
+              nz-button 
+              nzType="text" 
+              nzSize="small" 
+              class="action-btn edit-btn"
+              (click)="onEditDivision(division, $event)"
+              title="Editar división">
+              <span nz-icon nzType="edit"></span>
+            </button>
+            <button 
+              nz-button 
+              nzType="text" 
+              nzSize="small" 
+              nzDanger
+              class="action-btn delete-btn"
+              (click)="onDeleteDivision(division, $event)"
+              title="Eliminar división">
+              <span nz-icon nzType="delete"></span>
+            </button>
+          </div>
         </td>
       </tr>
     </tbody>

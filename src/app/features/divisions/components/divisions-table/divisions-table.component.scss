@@ -136,6 +136,15 @@
           width: 140px;
         }
       }
+
+      &.actions-col {
+        width: 100px;
+        text-align: center;
+
+        @media (max-width: 768px) {
+          width: 80px;
+        }
+      }
     }
 
     .ant-table-tbody > tr {
@@ -369,6 +378,21 @@
 
     .subdivisions-count {
       color: #595959;
+      
+      &.clickable {
+        color: #1890ff;
+        cursor: pointer;
+        text-decoration: underline;
+        
+        &:hover {
+          color: #40a9ff;
+        }
+      }
+      
+      &.disabled {
+        cursor: not-allowed;
+        color: #999;
+      }
     }
 
     .add-subdivision-btn {
@@ -392,5 +416,50 @@
 .ambassadors-cell {
   .ambassador-name {
     color: #595959;
+  }
+}
+
+.actions-cell {
+  text-align: center;
+
+  .actions-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    @media (max-width: 768px) {
+      gap: 4px;
+    }
+
+    .action-btn {
+      padding: 4px 8px;
+      min-width: 32px;
+      min-height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      @media (max-width: 768px) {
+        padding: 2px 6px;
+        min-width: 28px;
+        min-height: 28px;
+      }
+
+      &.edit-btn {
+        color: #1890ff;
+
+        &:hover {
+          color: #40a9ff;
+          background-color: rgba(24, 144, 255, 0.1);
+        }
+      }
+
+      &.delete-btn {
+        &:hover {
+          background-color: rgba(255, 77, 79, 0.1);
+        }
+      }
+    }
   }
 }

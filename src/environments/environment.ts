@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3000/api' // Ajusta esta URL según tu backend NestJS
+  apiUrl: 'https://visma-backend-lzqunom2jq-uc.a.run.app/api' // Ajusta esta URL según tu backend NestJS
 };

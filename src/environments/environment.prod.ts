@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://your-production-api.com/api' // Ajusta esta URL para producción
+  apiUrl: 'https://visma-backend-lzqunom2jq-uc.a.run.app/api'
 };

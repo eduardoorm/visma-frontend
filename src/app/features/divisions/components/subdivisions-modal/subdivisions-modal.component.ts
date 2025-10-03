@@ -7,7 +7,6 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { DivisionResponseDto } from '../../models/division.interface';
 import { DivisionService } from '../../services/division.service';
 import { Subject, takeUntil } from 'rxjs';
-
 @Component({
   selector: 'app-subdivisions-modal',
   standalone: true,
@@ -23,30 +22,23 @@ import { Subject, takeUntil } from 'rxjs';
 })
 export class SubdivisionsModalComponent implements OnChanges {
   private destroy$ = new Subject<void>();
-
   @Input() visible = false;
   @Input() parentDivision: DivisionResponseDto | null = null;
   @Output() visibleChange = new EventEmitter<boolean>();
-
   subdivisions: DivisionResponseDto[] = [];
   loading = false;
-
   constructor(private divisionService: DivisionService) {}
-
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['visible'] && this.visible && this.parentDivision) {
       this.loadSubdivisions();
     }
   }
-
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
-
   loadSubdivisions(): void {
     if (!this.parentDivision) return;
-    
     this.loading = true;
     this.divisionService.getSubdivisions(this.parentDivision.id)
       .pipe(takeUntil(this.destroy$))
@@ -61,7 +53,6 @@ export class SubdivisionsModalComponent implements OnChanges {
         }
       });
   }
-
   handleClose(): void {
     this.visible = false;
     this.visibleChange.emit(false);

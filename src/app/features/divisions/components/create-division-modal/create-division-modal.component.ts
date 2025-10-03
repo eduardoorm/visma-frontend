@@ -2,21 +2,17 @@ import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angu
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
-
-// NgZorro imports
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzMessageService } from 'ng-zorro-antd/message';
-
 import { DivisionService } from '../../services/division.service';
 import {
   DivisionResponseDto,
   CreateDivisionDto
 } from '../../models/division.interface';
-
 @Component({
   selector: 'app-create-division-modal',
   standalone: true,
@@ -33,16 +29,12 @@ import {
 })
 export class CreateDivisionModalComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
-
   @Input() visible = false;
   @Input() parentDivision: DivisionResponseDto | null = null;
-
   @Output() visibleChange = new EventEmitter<boolean>();
   @Output() divisionCreated = new EventEmitter<void>();
-
   divisionForm!: FormGroup;
   isCreating = false;
-
   constructor(
     private fb: FormBuilder,
     private divisionService: DivisionService,
@@ -50,19 +42,12 @@ export class CreateDivisionModalComponent implements OnInit, OnDestroy {
   ) {
     this.initForm();
   }
-
   ngOnInit(): void {
-    // Form will be initialized in constructor
   }
-
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
-
-  /**
-   * Inicializa el formulario de división
-   */
   initForm(): void {
     this.divisionForm = this.fb.group({
       parentName: [{ value: '', disabled: true }],
@@ -72,22 +57,14 @@ export class CreateDivisionModalComponent implements OnInit, OnDestroy {
       ambassadorName: ['', [Validators.maxLength(100)]]
     });
   }
-
-  /**
-   * Se ejecuta cuando se abre el modal
-   */
   onOpen(): void {
     if (this.parentDivision) {
       const newLevel = this.parentDivision.level + 1;
-
-      // Validar que no exceda nivel 5
       if (newLevel > 5) {
         this.message.warning('No se pueden crear subdivisiones en nivel 5');
         this.handleCancel();
         return;
       }
-
-      // Configurar el formulario
       this.divisionForm.patchValue({
         parentName: this.parentDivision.name,
         name: '',
@@ -97,23 +74,14 @@ export class CreateDivisionModalComponent implements OnInit, OnDestroy {
       });
     }
   }
-
-  /**
-   * Maneja el cierre del modal
-   */
   handleCancel(): void {
     this.visible = false;
     this.visibleChange.emit(false);
     this.divisionForm.reset();
   }
-
-  /**
-   * Maneja la creación de la división
-   */
   handleOk(): void {
     if (this.divisionForm.valid && this.parentDivision) {
       this.isCreating = true;
-
       const newDivision: CreateDivisionDto = {
         name: this.divisionForm.value.name,
         parentId: this.parentDivision.id,
@@ -121,7 +89,6 @@ export class CreateDivisionModalComponent implements OnInit, OnDestroy {
         level: this.divisionForm.get('level')?.value || (this.parentDivision.level + 1),
         ambassadorName: this.divisionForm.value.ambassadorName || undefined
       };
-
       this.divisionService.createDivision(newDivision)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
@@ -131,8 +98,6 @@ export class CreateDivisionModalComponent implements OnInit, OnDestroy {
             this.visibleChange.emit(false);
             this.isCreating = false;
             this.divisionForm.reset();
-
-            // Emitir evento para recargar la tabla
             this.divisionCreated.emit();
           },
           error: (error) => {
@@ -143,10 +108,6 @@ export class CreateDivisionModalComponent implements OnInit, OnDestroy {
         });
     }
   }
-
-  /**
-   * Callback cuando cambia la visibilidad del modal
-   */
   onVisibleChange(visible: boolean): void {
     if (visible) {
       this.onOpen();

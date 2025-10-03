@@ -8,7 +8,6 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { CreateDivisionDto, DivisionResponseDto } from '../../models/division.interface';
-
 @Component({
   selector: 'app-division-form-modal',
   standalone: true,
@@ -32,10 +31,8 @@ export class DivisionFormModalComponent implements OnInit, OnChanges {
   @Input() divisionToEdit: DivisionResponseDto | null = null;
   @Output() visibleChange = new EventEmitter<boolean>();
   @Output() submitForm = new EventEmitter<CreateDivisionDto>();
-
   divisionForm!: FormGroup;
   isLoading = false;
-
   levelOptions = [
     { label: 'Nivel 1', value: 1 },
     { label: 'Nivel 2', value: 2 },
@@ -43,21 +40,15 @@ export class DivisionFormModalComponent implements OnInit, OnChanges {
     { label: 'Nivel 4', value: 4 },
     { label: 'Nivel 5', value: 5 }
   ];
-
   constructor(private fb: FormBuilder) {}
-
   ngOnInit(): void {
     this.initForm();
   }
-
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['visible'] && !changes['visible'].currentValue) {
-      // Reset loading state when modal closes
       this.isLoading = false;
     }
-    
     if (changes['divisionToEdit'] && this.divisionToEdit && this.editMode) {
-      // Populate form with division data
       this.divisionForm.patchValue({
         name: this.divisionToEdit.name,
         parentId: this.divisionToEdit.parentId || null,
@@ -67,7 +58,6 @@ export class DivisionFormModalComponent implements OnInit, OnChanges {
       });
     }
   }
-
   initForm(): void {
     this.divisionForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
@@ -77,13 +67,11 @@ export class DivisionFormModalComponent implements OnInit, OnChanges {
       ambassadorName: ['', [Validators.maxLength(100)]]
     });
   }
-
   handleCancel(): void {
     this.visible = false;
     this.visibleChange.emit(false);
     this.resetForm();
   }
-
   handleOk(): void {
     if (this.divisionForm.valid) {
       this.isLoading = true;
@@ -105,7 +93,6 @@ export class DivisionFormModalComponent implements OnInit, OnChanges {
       });
     }
   }
-
   resetForm(): void {
     this.divisionForm.reset({
       level: 1,

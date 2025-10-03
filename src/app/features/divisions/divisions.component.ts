@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
-
 import { NavbarComponent } from '../../shared/components/navbar/navbar.component';
 import { DivisionsHeaderComponent } from '../../shared/components/divisions-header/divisions-header.component';
 import { TableControlsComponent } from '../../shared/components/table-controls/table-controls.component';
@@ -10,7 +9,6 @@ import { DivisionsTableComponent } from './components/divisions-table/divisions-
 import { TableFooterComponent } from '../../shared/components/table-footer/table-footer.component';
 import { DivisionFormModalComponent } from './components/division-form-modal/division-form-modal.component';
 import { SubdivisionsModalComponent } from './components/subdivisions-modal/subdivisions-modal.component';
-
 import { DivisionService } from './services/division.service';
 import {
   DivisionResponseDto,
@@ -22,7 +20,6 @@ import {
 } from './models/division.interface';
 import { NavLink, UserInfo, ActionIcon, TabConfig } from '../../shared/models/component-config.interface';
 import { FilterLabels, LevelOption } from './models/table-config.interface';
-
 @Component({
   selector: 'app-divisions',
   standalone: true,
@@ -43,7 +40,6 @@ import { FilterLabels, LevelOption } from './models/table-config.interface';
         [actionIcons]="actionIcons"
         [userInfo]="userInfo">
       </app-navbar>
-
       <app-divisions-header
         [searchValue]="searchValue"
         [tableColumns]="tableColumns"
@@ -60,14 +56,12 @@ import { FilterLabels, LevelOption } from './models/table-config.interface';
         (exportClick)="exportDivisions()"
         (createClick)="createDivision()">
       </app-divisions-header>
-
       <app-table-controls
         [viewMode]="viewMode"
         [tabs]="tabs"
         [viewModeLabels]="viewModeLabels"
         (viewModeChange)="onViewModeChange($event)">
       </app-table-controls>
-
       <app-divisions-table
         [divisions]="divisions"
         [loading]="loading"
@@ -90,7 +84,6 @@ import { FilterLabels, LevelOption } from './models/table-config.interface';
         (deleteDivision)="onDeleteDivision($event)"
         (viewSubdivisions)="onViewSubdivisions($event)">
       </app-divisions-table>
-
       <app-table-footer
         [total]="total"
         [pageSize]="pageSize"
@@ -101,7 +94,6 @@ import { FilterLabels, LevelOption } from './models/table-config.interface';
         (pageSizeChange)="onPageSizeChange($event)"
         (pageIndexChange)="onPageChange($event)">
       </app-table-footer>
-
       <app-division-form-modal
         [(visible)]="isModalVisible"
         [parentDivisions]="allDivisions"
@@ -109,7 +101,6 @@ import { FilterLabels, LevelOption } from './models/table-config.interface';
         [divisionToEdit]="divisionToEdit"
         (submitForm)="onSubmitDivisionForm($event)">
       </app-division-form-modal>
-
       <app-subdivisions-modal
         [(visible)]="isSubdivisionsModalVisible"
         [parentDivision]="selectedDivisionForSubdivisions">
@@ -125,39 +116,26 @@ import { FilterLabels, LevelOption } from './models/table-config.interface';
 })
 export class DivisionsComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
-
   @ViewChild(DivisionFormModalComponent) modalComponent?: DivisionFormModalComponent;
-
-  // Data properties
   divisions: DivisionResponseDto[] = [];
   allDivisions: DivisionResponseDto[] = [];
   loading = false;
   total = 0;
   pageSize = 10;
   pageIndex = 1;
-
-  // Modal state
   isModalVisible = false;
   isEditMode = false;
   divisionToEdit: DivisionResponseDto | null = null;
   isSubdivisionsModalVisible = false;
   selectedDivisionForSubdivisions: DivisionResponseDto | null = null;
-
-  // Search and filter properties
   searchValue = '';
   filters: DivisionFilters = {};
   sorting: DivisionSorting = { field: 'name', direction: 'asc' };
-
-  // Table configuration
   viewMode: 'list' | 'tree' = 'list';
   selectedColumns: string[] = ['division', 'divisionSuperior', 'colaboradores', 'nivel', 'subdivisiones', 'embajadores'];
-
-  // Selection properties
   allChecked = false;
   indeterminate = false;
   checkedMap: { [key: number]: boolean } = {};
-
-  // Table columns configuration
   tableColumns: DivisionTableColumn[] = [
     { key: 'division', title: 'División', sortable: true, filterable: true, width: '250px' },
     { key: 'divisionSuperior', title: 'División superior', sortable: true, filterable: true, width: '200px' },
@@ -166,39 +144,30 @@ export class DivisionsComponent implements OnInit, OnDestroy {
     { key: 'subdivisiones', title: 'Subdivisiones', sortable: true, filterable: false, width: '150px' },
     { key: 'embajadores', title: 'Embajadores', sortable: false, filterable: false, width: '200px' }
   ];
-
-  // Navbar configuration
   navLinks: NavLink[] = [
     { label: 'Dashboard', href: '#', active: false, ariaLabel: 'Ir al Dashboard' },
     { label: 'Organización', href: '#', active: true, ariaLabel: 'Ir a Organización' },
     { label: 'Modelos', href: '#', hasDropdown: true, ariaLabel: 'Ver Modelos' },
     { label: 'Seguimiento', href: '#', hasDropdown: true, ariaLabel: 'Ver Seguimiento' }
   ];
-
   actionIcons: ActionIcon[] = [
     { icon: 'mail', ariaLabel: 'Mensajes' },
     { icon: 'question-circle', ariaLabel: 'Ayuda' },
     { icon: 'bell', ariaLabel: 'Notificaciones', badge: 1 }
   ];
-
   userInfo: UserInfo = {
     name: 'Administrador',
     avatarUrl: 'assets/images/profile-image.png',
     ariaLabel: 'Perfil de usuario'
   };
-
-  // Table controls configuration
   tabs: TabConfig[] = [
     { label: 'Divisiones', value: '#', active: true, ariaLabel: 'Ver divisiones' },
     { label: 'Colaboradores', value: '#', active: false, ariaLabel: 'Ver colaboradores' }
   ];
-
   viewModeLabels = {
     list: 'Listado',
     tree: 'Árbol'
   };
-
-  // Filter labels configuration
   filterLabels: FilterLabels = {
     division: 'División:',
     divisionSuperior: 'Divisiones superiores:',
@@ -208,8 +177,6 @@ export class DivisionsComponent implements OnInit, OnDestroy {
     resetButton: 'Reiniciar',
     applyButton: 'Aplicar'
   };
-
-  // Level options configuration
   levelOptions: LevelOption[] = [
     { label: 'Todos los niveles', value: null },
     { label: 'Nivel 1', value: 1 },
@@ -218,39 +185,27 @@ export class DivisionsComponent implements OnInit, OnDestroy {
     { label: 'Nivel 4', value: 4 },
     { label: 'Nivel 5', value: 5 }
   ];
-
   constructor(
     private divisionService: DivisionService,
     private modal: NzModalService
   ) {}
-
   ngOnInit(): void {
     this.loadDivisions();
     this.loadAllDivisions();
     this.initCheckedMap();
   }
-
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
-
-  /**
-   * Initialize the checked map
-   */
   initCheckedMap(): void {
     this.checkedMap = {};
     this.allChecked = false;
     this.indeterminate = false;
   }
-
-  /**
-   * Load divisions with filters and pagination
-   */
   loadDivisions(): void {
     this.loading = true;
     this.initCheckedMap();
-
     this.divisionService.getAllDivisions(
       this.pageIndex,
       this.pageSize,
@@ -271,10 +226,6 @@ export class DivisionsComponent implements OnInit, OnDestroy {
       }
     });
   }
-
-  /**
-   * Load all divisions for parent division selection
-   */
   loadAllDivisions(): void {
     this.divisionService.getAllDivisions(1, 1000).pipe(
       takeUntil(this.destroy$)
@@ -287,62 +238,34 @@ export class DivisionsComponent implements OnInit, OnDestroy {
       }
     });
   }
-
-  /**
-   * Handle search
-   */
   onSearch(value: string): void {
     this.searchValue = value;
     this.filters.searchTerm = value || undefined;
     this.pageIndex = 1;
     this.loadDivisions();
   }
-
-  /**
-   * Handle sort change
-   */
   onSortChange(event: { column: string, direction: 'asc' | 'desc' }): void {
     this.sorting = { field: event.column as any, direction: event.direction };
     this.loadDivisions();
   }
-
-  /**
-   * Handle filter change
-   */
   onFilterChange(filters: DivisionFilters): void {
     this.filters = filters;
     this.pageIndex = 1;
     this.loadDivisions();
   }
-
-  /**
-   * Handle page change
-   */
   onPageChange(page: number): void {
     this.pageIndex = page;
     this.loadDivisions();
   }
-
-  /**
-   * Handle page size change
-   */
   onPageSizeChange(size: number): void {
     this.pageSize = size;
     this.pageIndex = 1;
     this.loadDivisions();
   }
-
-  /**
-   * Handle view mode change
-   */
   onViewModeChange(mode: 'list' | 'tree'): void {
     this.viewMode = mode;
     this.loadDivisions();
   }
-
-  /**
-   * Toggle column visibility
-   */
   toggleColumn(columnKey: string): void {
     const index = this.selectedColumns.indexOf(columnKey);
     if (index > -1) {
@@ -351,56 +274,32 @@ export class DivisionsComponent implements OnInit, OnDestroy {
       this.selectedColumns.push(columnKey);
     }
   }
-
-  /**
-   * Handle select all
-   */
   onAllChecked(checked: boolean): void {
     this.divisions.forEach(division => {
       this.checkedMap[division.id] = checked;
     });
     this.refreshCheckedStatus();
   }
-
-  /**
-   * Handle individual item check
-   */
   onItemChecked(event: { id: number, checked: boolean }): void {
     this.checkedMap[event.id] = event.checked;
     this.refreshCheckedStatus();
   }
-
-  /**
-   * Refresh checked status
-   */
   refreshCheckedStatus(): void {
     const divisions = this.divisions;
     const checkedCount = divisions.filter(d => this.checkedMap[d.id]).length;
     this.allChecked = divisions.length > 0 && checkedCount === divisions.length;
     this.indeterminate = checkedCount > 0 && checkedCount < divisions.length;
   }
-
-  /**
-   * Create new division
-   */
   createDivision(): void {
     this.isEditMode = false;
     this.divisionToEdit = null;
     this.isModalVisible = true;
   }
-
-  /**
-   * Handle edit division
-   */
   onEditDivision(division: DivisionResponseDto): void {
     this.isEditMode = true;
     this.divisionToEdit = division;
     this.isModalVisible = true;
   }
-
-  /**
-   * Handle delete division
-   */
   onDeleteDivision(division: DivisionResponseDto): void {
     this.modal.confirm({
       nzTitle: '¿Está seguro de eliminar esta división?',
@@ -424,21 +323,12 @@ export class DivisionsComponent implements OnInit, OnDestroy {
       }
     });
   }
-
-  /**
-   * Handle view subdivisions
-   */
   onViewSubdivisions(division: DivisionResponseDto): void {
     this.selectedDivisionForSubdivisions = division;
     this.isSubdivisionsModalVisible = true;
   }
-
-  /**
-   * Handle division form submission (create or edit)
-   */
   onSubmitDivisionForm(divisionData: CreateDivisionDto): void {
     if (this.isEditMode && this.divisionToEdit) {
-      // Update existing division
       const updateData: UpdateDivisionDto = {
         name: divisionData.name,
         parentId: divisionData.parentId,
@@ -446,7 +336,6 @@ export class DivisionsComponent implements OnInit, OnDestroy {
         collaborators: divisionData.collaborators,
         ambassadorName: divisionData.ambassadorName
       };
-
       this.divisionService.updateDivision(this.divisionToEdit.id, updateData)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
@@ -467,7 +356,6 @@ export class DivisionsComponent implements OnInit, OnDestroy {
           }
         });
     } else {
-      // Create new division
       this.divisionService.createDivision(divisionData)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
@@ -489,10 +377,6 @@ export class DivisionsComponent implements OnInit, OnDestroy {
         });
     }
   }
-
-  /**
-   * Export divisions
-   */
   exportDivisions(): void {
     this.divisionService.exportDivisions('csv')
       .pipe(takeUntil(this.destroy$))
@@ -510,20 +394,10 @@ export class DivisionsComponent implements OnInit, OnDestroy {
         }
       });
   }
-
-  /**
-   * Import divisions
-   */
   importDivisions(): void {
-    // TODO: Open modal to import file
     console.log('Import divisions');
   }
-
-  /**
-   * Handle subdivision created event
-   */
   onSubdivisionCreated(): void {
-    // Reload divisions to show the new subdivision
     this.loadDivisions();
   }
 }

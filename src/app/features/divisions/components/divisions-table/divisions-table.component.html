@@ -283,7 +283,7 @@
               (click)="onViewSubdivisions(division, $event)">
               {{ getSubdivisionsCount(division) }}
             </span>
-            <button nz-button nzType="default" nzSize="small" class="add-subdivision-btn" *ngIf="division.level < 5" (click)="onAddSubdivision(division)">
+            <button nz-button nzType="default" nzSize="small" class="add-subdivision-btn" *ngIf="division.level < 5" (click)="onViewSubdivisions(division, $event)">
               <span nz-icon nzType="plus"></span>
             </button>
           </div>

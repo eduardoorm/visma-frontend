@@ -106,7 +106,7 @@
               </div>
               <div class="filter-dropdown-actions">
                 <button nz-button nzSize="small" nzType="default" (click)="onParentFilter(null)">Reiniciar</button>
-                <button nz-button nzSize="small" nzType="primary">Aplicar</button>
+                <button nz-button nzSize="small" nzType="primary" (click)="activeFilterColumn = null">Aplicar</button>
               </div>
             </div>
           </nz-dropdown-menu>
@@ -169,7 +169,7 @@
               </div>
               <div class="filter-dropdown-actions">
                 <button nz-button nzSize="small" nzType="default" (click)="onLevelFilter(null)">Reiniciar</button>
-                <button nz-button nzSize="small" nzType="primary">Aplicar</button>
+                <button nz-button nzSize="small" nzType="primary" (click)="activeFilterColumn = null">Aplicar</button>
               </div>
             </div>
           </nz-dropdown-menu>

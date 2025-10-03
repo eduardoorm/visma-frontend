@@ -124,6 +124,7 @@
 
       ::ng-deep .ant-pagination-prev,
       ::ng-deep .ant-pagination-next {
+        height: auto;
         @media (max-width: 768px) {
           margin-bottom: 8px;
         }

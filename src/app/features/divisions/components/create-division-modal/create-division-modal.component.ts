@@ -30,7 +30,6 @@ import {
     NzButtonModule
   ],
   templateUrl: './create-division-modal.component.html',
-  styleUrls: ['./create-division-modal.component.scss']
 })
 export class CreateDivisionModalComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
@@ -80,7 +79,7 @@ export class CreateDivisionModalComponent implements OnInit, OnDestroy {
   onOpen(): void {
     if (this.parentDivision) {
       const newLevel = this.parentDivision.level + 1;
-      
+
       // Validar que no exceda nivel 5
       if (newLevel > 5) {
         this.message.warning('No se pueden crear subdivisiones en nivel 5');
@@ -132,7 +131,7 @@ export class CreateDivisionModalComponent implements OnInit, OnDestroy {
             this.visibleChange.emit(false);
             this.isCreating = false;
             this.divisionForm.reset();
-            
+
             // Emitir evento para recargar la tabla
             this.divisionCreated.emit();
           },

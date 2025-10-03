@@ -276,14 +276,17 @@
         <!-- Subdivisiones -->
         <td class="subdivisions-cell" *ngIf="selectedColumns.includes('subdivisiones')">
           <div class="subdivisions-content">
-            <span 
-              class="subdivisions-count" 
-              [class.clickable]="getSubdivisionsCount(division) > 0"
-              [class.disabled]="getSubdivisionsCount(division) === 0"
-              (click)="onViewSubdivisions(division, $event)">
+            <span class="subdivisions-count">
               {{ getSubdivisionsCount(division) }}
             </span>
-            <button nz-button nzType="default" nzSize="small" class="add-subdivision-btn" *ngIf="division.level < 5" (click)="onViewSubdivisions(division, $event)">
+            <button
+              nz-button
+              nzType="default"
+              nzSize="small"
+              class="add-subdivision-btn"
+              *ngIf="division.level < 5"
+              [disabled]="getSubdivisionsCount(division) === 0"
+              (click)="onViewSubdivisions(division, $event)">
               <span nz-icon nzType="plus"></span>
             </button>
           </div>
@@ -297,19 +300,19 @@
         <!-- Acciones -->
         <td class="actions-cell">
           <div class="actions-content">
-            <button 
-              nz-button 
-              nzType="text" 
-              nzSize="small" 
+            <button
+              nz-button
+              nzType="text"
+              nzSize="small"
               class="action-btn edit-btn"
               (click)="onEditDivision(division, $event)"
               title="Editar división">
               <span nz-icon nzType="edit"></span>
             </button>
-            <button 
-              nz-button 
-              nzType="text" 
-              nzSize="small" 
+            <button
+              nz-button
+              nzType="text"
+              nzSize="small"
               nzDanger
               class="action-btn delete-btn"
               (click)="onDeleteDivision(division, $event)"

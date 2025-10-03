@@ -378,21 +378,6 @@
 
     .subdivisions-count {
       color: #595959;
-      
-      &.clickable {
-        color: #1890ff;
-        cursor: pointer;
-        text-decoration: underline;
-        
-        &:hover {
-          color: #40a9ff;
-        }
-      }
-      
-      &.disabled {
-        cursor: not-allowed;
-        color: #999;
-      }
     }
 
     .add-subdivision-btn {
@@ -405,9 +390,21 @@
       border-radius: 2px;
       border-color: #d9d9d9;
 
-      &:hover {
+      &:hover:not([disabled]) {
         border-color: #1890ff;
         color: #1890ff;
+      }
+
+      &[disabled] {
+        cursor: not-allowed;
+        opacity: 0.4;
+        border-color: #d9d9d9;
+        color: #d9d9d9;
+
+        &:hover {
+          border-color: #d9d9d9;
+          color: #d9d9d9;
+        }
       }
     }
   }

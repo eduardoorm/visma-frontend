@@ -48,6 +48,7 @@ export class DivisionsTableComponent implements OnInit, OnDestroy {
   parentSearchValue: string = '';
   divisionFilterVisible = false;
   parentFilterVisible = false;
+  levelFilterVisible = false;
 
   // Modal and form properties
   isModalVisible = false;

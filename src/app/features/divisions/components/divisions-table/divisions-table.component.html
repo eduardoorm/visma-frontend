@@ -191,6 +191,8 @@
                     [nzDropdownMenu]="levelFilterMenu"
                     nzTrigger="click"
                     nzPlacement="bottomRight"
+                    [nzVisible]="levelFilterVisible"
+                    (nzVisibleChange)="levelFilterVisible = $event"
                     [attr.aria-label]="'Filtrar ' + getColumnLabel('nivel')"
                     (click)="onFilterIconClick($event, 'level')"></span>
             </div>
@@ -207,8 +209,8 @@
                 </div>
               </div>
               <div class="filter-dropdown-actions">
-                <button nz-button nzSize="small" nzType="default" (click)="onLevelFilter(null)">{{ filterLabels.resetButton }}</button>
-                <button nz-button nzSize="small" nzType="primary">{{ filterLabels.applyButton }}</button>
+                <button nz-button nzSize="small" nzType="default" (click)="onLevelFilter(null); levelFilterVisible = false">{{ filterLabels.resetButton }}</button>
+                <button nz-button nzSize="small" nzType="primary" (click)="levelFilterVisible = false">{{ filterLabels.applyButton }}</button>
               </div>
             </div>
           </nz-dropdown-menu>

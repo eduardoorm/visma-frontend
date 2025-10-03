@@ -82,6 +82,29 @@ export class DivisionService {
    * Crea una nueva división
    */
   createDivision(division: CreateDivisionDto): Observable<DivisionResponseDto> {
+    if (this.useMockData) {
+      // Generate a new ID
+      const newId = Math.max(...this.mockDivisions.map(d => d.id), 0) + 1;
+      const now = new Date().toISOString();
+      
+      const newDivision: DivisionResponseDto = {
+        id: newId,
+        name: division.name,
+        parentId: division.parentId,
+        collaborators: division.collaborators,
+        level: division.level,
+        ambassadorName: division.ambassadorName,
+        createdAt: now,
+        updatedAt: now
+      };
+      
+      // Add to mock data
+      this.mockDivisions.push(newDivision);
+      
+      // Return with delay to simulate API call
+      return of(newDivision).pipe(delay(500));
+    }
+    
     return this.http.post<DivisionResponseDto>(this.apiUrl, division);
   }
 

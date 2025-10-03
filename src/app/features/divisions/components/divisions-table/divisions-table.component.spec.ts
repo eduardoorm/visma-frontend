@@ -21,11 +21,11 @@ describe('DivisionsTableComponent', () => {
     fixture = TestBed.createComponent(DivisionsTableComponent);
     component = fixture.componentInstance;
     divisionService = TestBed.inject(DivisionService) as jasmine.SpyObj<DivisionService>;
-    
+
     // Mock the getAllDivisions call
-    divisionService.getAllDivisions.and.returnValue(of({ 
-      data: [], 
-      meta: { total: 0, page: 1, limit: 100, totalPages: 0 } 
+    divisionService.getAllDivisions.and.returnValue(of({
+      data: [],
+      meta: { total: 0, page: 1, limit: 100, totalPages: 0 }
     }));
   });
 
@@ -96,10 +96,10 @@ describe('DivisionsTableComponent', () => {
   it('should clear name filter', () => {
     spyOn(component.filterChange, 'emit');
     component.nameSearchValue = 'test';
-    component.filters = { search: 'test' };
+    component.filters = { searchTerm: 'test' };
     component.clearNameFilter();
     expect(component.nameSearchValue).toBe('');
-    expect(component.filterChange.emit).toHaveBeenCalledWith({ search: undefined });
+    expect(component.filterChange.emit).toHaveBeenCalledWith({ searchTerm: undefined });
   });
 
   it('should load parent divisions on init', () => {

@@ -7,6 +7,7 @@ import { DivisionsHeaderComponent } from '../../shared/components/divisions-head
 import { TableControlsComponent } from '../../shared/components/table-controls/table-controls.component';
 import { DivisionsTableComponent } from './components/divisions-table/divisions-table.component';
 import { TableFooterComponent } from '../../shared/components/table-footer/table-footer.component';
+import { CreateDivisionModalComponent } from './components/create-division-modal/create-division-modal.component';
 
 import { DivisionService } from './services/division.service';
 import {
@@ -27,7 +28,8 @@ import { FilterLabels, LevelOption } from './models/table-config.interface';
     DivisionsHeaderComponent,
     TableControlsComponent,
     DivisionsTableComponent,
-    TableFooterComponent
+    TableFooterComponent,
+    CreateDivisionModalComponent
   ],
   template: `
     <div class="divisions-page">
@@ -91,6 +93,12 @@ import { FilterLabels, LevelOption } from './models/table-config.interface';
         (pageSizeChange)="onPageSizeChange($event)"
         (pageIndexChange)="onPageChange($event)">
       </app-table-footer>
+
+      <app-create-division-modal
+        [(visible)]="isModalVisible"
+        [parentDivision]="null"
+        (divisionCreated)="onDivisionCreated()">
+      </app-create-division-modal>
     </div>
   `,
   styles: [`
@@ -123,6 +131,9 @@ export class DivisionsComponent implements OnInit, OnDestroy {
   allChecked = false;
   indeterminate = false;
   checkedMap: { [key: number]: boolean } = {};
+
+  // Modal properties
+  isModalVisible = false;
 
   // Table columns configuration
   tableColumns: DivisionTableColumn[] = [
@@ -331,8 +342,15 @@ export class DivisionsComponent implements OnInit, OnDestroy {
    * Create new division
    */
   createDivision(): void {
-    // TODO: Open modal to create division
-    console.log('Create division');
+    this.isModalVisible = true;
+  }
+
+  /**
+   * Handle division creation from modal
+   */
+  onDivisionCreated(): void {
+    // Reload divisions to show the new one
+    this.loadDivisions();
   }
 
   /**

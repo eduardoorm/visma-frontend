@@ -88,12 +88,21 @@ export class CreateDivisionModalComponent implements OnInit, OnDestroy {
         return;
       }
 
-      // Configurar el formulario
+      // Configurar el formulario para subdivisión
       this.divisionForm.patchValue({
         parentName: this.parentDivision.name,
         name: '',
         collaborators: 1,
         level: newLevel,
+        ambassadorName: ''
+      });
+    } else {
+      // Configurar el formulario para división de nivel 1 (sin padre)
+      this.divisionForm.patchValue({
+        parentName: 'Ninguna (División principal)',
+        name: '',
+        collaborators: 1,
+        level: 1,
         ambassadorName: ''
       });
     }
@@ -112,14 +121,14 @@ export class CreateDivisionModalComponent implements OnInit, OnDestroy {
    * Maneja la creación de la división
    */
   handleOk(): void {
-    if (this.divisionForm.valid && this.parentDivision) {
+    if (this.divisionForm.valid) {
       this.isCreating = true;
 
       const newDivision: CreateDivisionDto = {
         name: this.divisionForm.value.name,
-        parentId: this.parentDivision.id,
+        parentId: this.parentDivision?.id || undefined,
         collaborators: this.divisionForm.value.collaborators,
-        level: this.divisionForm.get('level')?.value || (this.parentDivision.level + 1),
+        level: this.divisionForm.get('level')?.value || (this.parentDivision ? this.parentDivision.level + 1 : 1),
         ambassadorName: this.divisionForm.value.ambassadorName || undefined
       };
 

@@ -48,6 +48,7 @@ export class DivisionsTableComponent implements OnInit, OnDestroy {
   parentSearchValue: string = '';
   divisionFilterVisible = false;
   parentFilterVisible = false;
+  levelFilterVisible = false;
 
   // Modal and form properties
   isModalVisible = false;
@@ -154,6 +155,7 @@ export class DivisionsTableComponent implements OnInit, OnDestroy {
   onLevelFilter(level: number | null): void {
     const updatedFilters = { ...this.filters, level: level || undefined };
     this.filterChange.emit(updatedFilters);
+    this.levelFilterVisible = false;
   }
 
   /**
@@ -163,6 +165,7 @@ export class DivisionsTableComponent implements OnInit, OnDestroy {
     const updatedFilters = { ...this.filters, parentId: parentId || undefined };
     console.log(updatedFilters);
     this.filterChange.emit(updatedFilters);
+    this.parentFilterVisible = false;
   }
 
   // Limpia solo el filtro de búsqueda de división
